@@ -1,0 +1,19 @@
+﻿@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+                <ModalTitle>Enter Credentials</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+
+            <TextEdit @bind-Text="UserID" Placeholder="Enter user ID" />
+            <TextEdit @bind-Text="Password" Placeholder="Enter password" Role="TextRole.Password" />
+            <TextEdit @bind-Text="Token" Placeholder="Enter token" />
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color ="Color.Primary" Clicked="@LogIn">Log In</Button>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

@@ -1,0 +1,64 @@
+﻿@using Blazorise.DataGrid
+@using LocalEdit.PlanTypes
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Export Type</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @*https://blazorise.com/docs/components/validation*@
+            @*<Validations Mode="ValidationMode.Manual">*@
+            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                <Blazorise.ValidationSummary Label="The following errors were found..." />
+                    <Field>
+                    <FieldLabel>Diagram Type</FieldLabel>
+                    <RadioGroup TValue="string" Name="dtype" @bind-CheckedValue="@DiagramType">
+                        <Radio Value="@("gantt")">Gantt</Radio>
+                        <Radio Value="@("timeline")">Timeline</Radio>
+                    </RadioGroup>
+                </Field>
+                <Field>
+                    <FieldLabel>Output Format</FieldLabel>
+                    <RadioGroup TValue="string" Name="oformat" @bind-CheckedValue="@OutputFormat">
+                        <Radio Value="@("html")">HTML</Radio>
+                        <Radio Value="@("markdown")">Markdown</Radio>
+                    </RadioGroup>
+                </Field>
+
+                @*
+                <Field>
+                <FieldLabel>Label</FieldLabel>
+                <Validation Validator="ValidationRule.IsNotEmpty">
+                <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
+                <Feedback>
+                <ValidationError>Please enter the label.</ValidationError>
+                </Feedback>
+                </TextEdit>
+                </Validation>
+                </Field>
+
+                <Field Horizontal>
+                <FieldLabel ColumnSize="ColumnSize.Is3">Start Date</FieldLabel>
+                <FieldBody ColumnSize="ColumnSize.Is9">
+                <DateEdit @bind-Date="Item.StartDate" Placeholder="Enter start date" />
+                </FieldBody>
+                </Field>
+
+                <Field Horizontal>
+                <FieldLabel ColumnSize="ColumnSize.Is3">End Date</FieldLabel>
+                <FieldBody ColumnSize="ColumnSize.Is9">
+                <DateEdit @bind-Date="Item.EndDate" Placeholder="Enter end date" />
+                </FieldBody>
+                </Field>
+
+                *@
+            </Validations>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

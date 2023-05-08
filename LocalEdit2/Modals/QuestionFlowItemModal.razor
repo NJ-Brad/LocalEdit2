@@ -1,0 +1,220 @@
+﻿@using LocalEdit.QuestionFlowTypes;
+@using Blazorise.DataGrid
+
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Question Flow Item Edit</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+
+            @if (Item == null)
+            {
+                <h1>No item selected to edit</h1>
+            }
+
+            @if (Item != null)
+{
+
+
+            @*https://blazorise.com/docs/components/validation*@
+            @*<Validations Mode="ValidationMode.Manual">*@
+            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                <Blazorise.ValidationSummary Label="The following errors were found..." />
+                @*    <Field>
+                    <FieldLabel>Name with validation</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                    <Blazorise.TextEdit Placeholder="Enter name (validated)">
+                    <Feedback>
+                    <ValidationNone>Please enter the name.</ValidationNone>
+                    <ValidationSuccess>Name is good.</ValidationSuccess>
+                    <ValidationError>Enter valid name!</ValidationError>
+                    </Feedback>
+                    </Blazorise.TextEdit>
+                    </Validation>
+                    </Field>
+                *@
+                <Field>
+                    <FieldLabel>ID</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                        <TextEdit @bind-Text="Item.id" Placeholder="Enter id">
+                            <Feedback>
+                                <ValidationError>Please enter the ID.</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Validation>
+                </Field>
+
+                <Field>
+                    <FieldLabel>Label</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                        <TextEdit @bind-Text="Item.title" Placeholder="Enter label">
+                            <Feedback>
+                                <ValidationError>Please enter the label.</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Validation>
+                </Field>
+
+@*                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <TextEdit @bind-Text="item.Description" Placeholder="Enter description" />
+                </Field>
+*@
+@*<hr />
+                <h2>Relations</h2>
+
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewRelationship">
+                    <Icon Name="IconName.Add" />
+                    New
+                </Button>
+                @if (SelectedRelationshipRow == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                }
+                @if (SelectedRelationshipRow != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowRelationshipModal">
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                }
+
+                @if (SelectedRelationshipRow == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                }
+                @if (SelectedRelationshipRow != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteRelationship">
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                }
+
+                <DataGrid TItem="QuestionFlowRelationship"
+                          Data="@Item?.NextQuestions"
+                          @bind-SelectedRow="@SelectedRelationshipRow"
+                          Responsive>
+                    <DataGridColumns>
+                        <DataGridColumn Field="@nameof( QuestionFlowRelationship.Label )" Editable="false" />
+
+                        <DataGridColumn Field="@nameof( QuestionFlowRelationship.To )" Editable="false">
+                            <DisplayTemplate>
+                                @{
+                                    QuestionFlowRelationship? rel = context as QuestionFlowRelationship;
+                                    if (rel != null)
+                                    {
+                                        @($"{DecodeQuestionFlowId(rel.To)}")
+                                        //if (rel.From != null)
+                                        //{
+                                        //    @($"{DecodeQuestionFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeQuestionFlowId(rel.To)}")
+                                        //    <br />
+                                        //    <span style="padding-left:2em">@($"{rel.Technology}")</span>
+                                        //}
+                                    }
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+
+                    </DataGridColumns>
+                    <EmptyTemplate>
+                        <div class="box">
+                            No relations were found!
+                        </div>
+                    </EmptyTemplate>
+                </DataGrid>
+*@
+                <hr />
+ <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+                Link Logic
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewLinkLogic">
+                    <Icon Name="IconName.Add" />
+                    New
+                </Button>
+                @if (SelectedLinkLogicRow == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+                }
+                @if (SelectedLinkLogicRow != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowLinkLogicModal">
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                }
+
+                @if (SelectedLinkLogicRow == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+                }
+                @if (SelectedLinkLogicRow != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteLinkLogic">
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                }
+                </Span>
+
+                <DataGrid TItem="LinkLogic"
+                          Data="@Item?.linkLogic"
+                          @bind-SelectedRow="@SelectedLinkLogicRow"
+Responsive>
+                    <DataGridColumns>
+                        <DataGridColumn Field="@nameof( LinkLogic.asString )" Editable="false" />
+                        @*                        <DataGridColumn Field="@nameof( QuestionFlowRelationship.To )" Editable="false" />*@
+
+                        <DataGridColumn Field="@nameof( LinkLogic.jumpToItemId )" Editable="false">
+                            <DisplayTemplate>
+                                @{
+                                    LinkLogic? rel = context as LinkLogic;
+                                    if (rel != null)
+                                    {
+                                        @($"{DecodeQuestionFlowId(rel.jumpToItemId)}")
+                                        //if (rel.From != null)
+                                        //{
+                                        //    @($"{DecodeQuestionFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeQuestionFlowId(rel.To)}")
+                                        //    <br />
+                                        //    <span style="padding-left:2em">@($"{rel.Technology}")</span>
+                                        //}
+                                    }
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+
+
+                    </DataGridColumns>
+                    <EmptyTemplate>
+                        <div class="box">
+                            No logical links were found!
+                        </div>
+                    </EmptyTemplate>
+                </DataGrid>
+            </Validations>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<LocalEdit.Modals.QuestionFlowRelationshipModal @ref="QuestionFlowRelationshipModalRef" Items="@Items" Closed="@OnQuestionFlowRelationshipModalClosed" Item="@SelectedRelationshipRow"></LocalEdit.Modals.QuestionFlowRelationshipModal>
+<LocalEdit.Modals.QuestionFlowLinkLogicModal @ref="QuestionFlowLinkLogicModalRef" Items="@Items" Closed="@OnQuestionFlowLinkLogicModalClosed" Item="@SelectedLinkLogicRow"></LocalEdit.Modals.QuestionFlowLinkLogicModal>

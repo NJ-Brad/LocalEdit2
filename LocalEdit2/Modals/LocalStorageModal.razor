@@ -1,0 +1,34 @@
+﻿@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            @if (loadFileMode)
+            {
+                <ModalTitle>Load File</ModalTitle>
+            }
+            @if (!loadFileMode)
+            {
+                <ModalTitle>Save File</ModalTitle>
+            }
+            @*            <CloseButton />*@
+        </ModalHeader>
+        <ModalBody>
+
+            @if (loadFileMode)
+            {
+                <FilePicker Upload="OnFileUpload" ShowMode="FilePickerShowMode.Dropdown" AutoReset=true />
+            }
+
+            @if (!loadFileMode)
+            {
+                <TextEdit @bind-Text="Name" Placeholder="Enter file name" />
+                <button class="btn btn-primary" @onclick="DownloadFile">Save</button>
+            }
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Close</Button>
+            @*            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save Changes</Button>*@
+        </ModalFooter>
+    </ModalContent>
+</Modal>

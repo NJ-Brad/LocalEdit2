@@ -1,0 +1,171 @@
+﻿@using Blazorise.DataGrid
+@using LocalEdit.PlanTypes
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Plan Item Edit</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @*https://blazorise.com/docs/components/validation*@
+            @*<Validations Mode="ValidationMode.Manual">*@
+            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                <Blazorise.ValidationSummary Label="The following errors were found..." />
+                @*    <Field>
+                    <FieldLabel>Name with validation</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                    <Blazorise.TextEdit Placeholder="Enter name (validated)">
+                    <Feedback>
+                    <ValidationNone>Please enter the name.</ValidationNone>
+                    <ValidationSuccess>Name is good.</ValidationSuccess>
+                    <ValidationError>Enter valid name!</ValidationError>
+                    </Feedback>
+                    </Blazorise.TextEdit>
+                    </Validation>
+                    </Field>
+                *@
+
+                @if (Item != null)
+                {
+                    <Field>
+                        <FieldLabel>Label</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                            <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
+                                <Feedback>
+                                    <ValidationError>Please enter the label.</ValidationError>
+                                </Feedback>
+                            </TextEdit>
+                        </Validation>
+                    </Field>
+
+                    <Field   
+
+                Horizontal
+                    >
+                        <FieldLabel ColumnSize="ColumnSize.Is3">Story ID</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is9">
+                            <TextEdit @bind-Text="Item.StoryId" Placeholder="Enter story ID" />
+                        </FieldBody>
+                    </Field>
+
+                    <Field   
+
+                Horizontal
+                    >
+                        <FieldLabel ColumnSize="ColumnSize.Is3">Duration</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is5">
+                            <Validation Validator="ValidationRule.IsNotEmpty">
+                                <TextEdit @bind-Text="Item.Duration" Placeholder="Enter duration">
+                                    <Feedback>
+                                        <ValidationError>Please enter the duration.</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </Validation>
+                        </FieldBody>
+                        Days
+                    </Field>
+
+                    @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+                Depends On
+                </Span>
+                <br />
+                *@
+                    <h3>Depends On</h3>
+                    <div style="overflow-y : auto; height:150px">
+                        @foreach (var item in @Items)
+                        {
+                            @*<SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>*@
+                            @*<Check TValue="bool" Checked="@rememberMe" CheckedChanged="@OnRememberMeChanged">Remember Me</Check>*@
+                            @*<Check TValue="bool" CheckedChanged="@OnRememberMeChanged">@(item.Label)</Check>*@
+                            <Check TValue="bool" Checked="@(IsChecked(item.ID))" CheckedChanged="@(() => OnRememberMeChanged2(item.ID))">@(
+                        item.Label
+)</Check>
+                        }
+                    </div>
+                    @*                <br />
+                <h3>Earliest Start Date</h3>
+                <DateEdit TValue="DateTime?" Date="@earliestDate" DateChanged="@OnDateChanged" />
+*@
+                    @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+                    Depends On
+
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewDependency">
+                        <Icon Name="IconName.Add" />
+                        New
+                    </Button>
+
+                    @if (SelectedDependencyRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
+                    @if (SelectedDependencyRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@EditDependency">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
+
+                    @if (SelectedDependencyRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
+                    @if (SelectedDependencyRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteDependency">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
+
+                </Span>
+                <br />
+                <h2></h2>
+
+                <DataGrid TItem="PlanItemDependency"
+                          Data="@Item.Dependencies"
+                          @bind-SelectedRow="@SelectedDependencyRow"
+                          Responsive>
+                    <DataGridColumns>
+                        <DataGridColumn Field="@nameof(PlanItemDependency.ID)" Editable="false">
+                            <DisplayTemplate>
+                                @{
+                                    @($"{context?.ToString()}")
+                                    //@($"{DecodePlanItemId(context.ID)}")
+                                    //if ( date != null )
+                                    //{
+                                    //    @($"{date.Value.ToShortDateString()} | Age: {( DateTime.Now.Year - date.Value.Year )}")
+                                    //}
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                    <EmptyTemplate>
+                        <div class="box">
+                            No dependencies declared!
+                        </div>
+                    </EmptyTemplate>
+                </DataGrid>
+*@
+                }
+            </Validations>
+
+
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@*<LocalEdit.Modals.PlanDependencyModal @ref="planDependencyModalRef" Items=@Items Closed="@OnDependencyModalClosed" Item="@SelectedDependencyRow"></LocalEdit.Modals.PlanDependencyModal>*@
+

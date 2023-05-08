@@ -1,0 +1,45 @@
+﻿@using LocalEdit.C4Types
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Meeting Countdown Settings</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+@*            <Alert @ref="myAlert" Color="Color.Success">
+                <AlertMessage>
+                    Alert test.
+                </AlertMessage>
+                <CloseButton />
+            </Alert>
+*@
+
+            @*https://blazorise.com/docs/components/validation*@
+            @*<Validations Mode="ValidationMode.Manual">*@
+            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                <Blazorise.ValidationSummary Label="Following error occurs..." />
+
+                <Field>
+                    <FieldLabel>Start Time</FieldLabel>
+                    <TimeEdit TValue="TimeSpan?" @bind-Time="Configuration.StartTime" />
+                </Field>
+
+                <Field>
+                    <FieldLabel>End Time</FieldLabel>
+                    <TimeEdit TValue="TimeSpan?" @bind-Time="Configuration.EndTime" />
+                </Field>
+
+                <Field>
+                    <FieldLabel>Warning Minutes</FieldLabel>
+                    <NumericEdit @bind-Value="Configuration.WarningMinutes" />
+                </Field>
+
+            </Validations>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseModal">Close</Button>
+            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save Changes</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

@@ -1,0 +1,107 @@
+﻿@using Blazorise.DataGrid
+@using LocalEdit.PlanTypes
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>@Title</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @*https://blazorise.com/docs/components/validation*@
+            @*<Validations Mode="ValidationMode.Manual">*@
+            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                <Blazorise.ValidationSummary Label="The following errors were found..." />
+                @*    <Field>
+                <FieldLabel>Name with validation</FieldLabel>
+                <Validation Validator="ValidationRule.IsNotEmpty">
+                <Blazorise.TextEdit Placeholder="Enter name (validated)">
+                <Feedback>
+                <ValidationNone>Please enter the name.</ValidationNone>
+                <ValidationSuccess>Name is good.</ValidationSuccess>
+                <ValidationError>Enter valid name!</ValidationError>
+                </Feedback>
+                </Blazorise.TextEdit>
+                </Validation>
+                </Field>
+                *@
+@*
+    <Field>
+                    <FieldLabel>Label</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                        <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
+                            <Feedback>
+                                <ValidationError>Please enter the label.</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Validation>
+                </Field>
+
+                <Field Horizontal>
+                    <FieldLabel ColumnSize="ColumnSize.Is3">Start Date</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is9">
+                        <DateEdit @bind-Date="Item.StartDate" Placeholder="Enter start date" />
+                    </FieldBody>
+                </Field>
+
+                <Field Horizontal>
+                    <FieldLabel ColumnSize="ColumnSize.Is3">End Date</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is9">
+                        <DateEdit @bind-Date="Item.EndDate" Placeholder="Enter end date" />
+                    </FieldBody>
+                </Field>
+
+*@  
+</Validations>
+            @MarkedUpQuestionText
+
+        </ModalBody>
+        <ModalFooter>
+            @if (ButtonVisible(1) && ButtonPrimary(1))
+            {
+                <Button Color="Color.Primary" Type="ButtonType.Submit" Clicked="(() => ButtonClicked(ModalResult.ButtonOne))">@Buttons[0]</Button>
+            }
+            @if (ButtonVisible(1) && !ButtonPrimary(1))
+            {
+                <Button Color="Color.Secondary" Clicked="(() => ButtonClicked(ModalResult.ButtonOne))">@Buttons[0]</Button>
+            }
+
+            @if (ButtonVisible(2) && ButtonPrimary(2))
+            {
+                <Button Color="Color.Primary" Type="ButtonType.Submit" Clicked="(() => ButtonClicked(ModalResult.ButtonTwo))">@Buttons[1]</Button>
+            }
+            @if (ButtonVisible(2) && !ButtonPrimary(2))
+            {
+                <Button Color="Color.Secondary" Clicked="(() => ButtonClicked(ModalResult.ButtonTwo))">@Buttons[1]</Button>
+            }
+
+            @if (ButtonVisible(3) && ButtonPrimary(3))
+            {
+                <Button Color="Color.Primary" Type="ButtonType.Submit" Clicked="(() => ButtonClicked(ModalResult.ButtonThree))">@Buttons[2]</Button>
+            }
+            @if (ButtonVisible(3) && !ButtonPrimary(3))
+            {
+                <Button Color="Color.Secondary" Clicked="(() => ButtonClicked(ModalResult.ButtonThree))">@Buttons[2]</Button>
+            }
+
+            @if (ButtonVisible(4) && ButtonPrimary(4))
+            {
+                <Button Color="Color.Primary" Type="ButtonType.Submit" Clicked="(() => ButtonClicked(ModalResult.ButtonFour))">@Buttons[3]</Button>
+            }
+            @if (ButtonVisible(4) && !ButtonPrimary(4))
+            {
+                <Button Color="Color.Secondary" Clicked="(() => ButtonClicked(ModalResult.ButtonFour))">@Buttons[3]</Button>
+            }
+
+            @if (ButtonVisible(5) && ButtonPrimary(5))
+            {
+                <Button Color="Color.Primary" Type="ButtonType.Submit" Clicked="(() => ButtonClicked(ModalResult.ButtonFive))">@Buttons[4]</Button>
+            }
+            @if (ButtonVisible(5) && !ButtonPrimary(5))
+            {
+                <Button Color="Color.Secondary" Clicked="(() => ButtonClicked(ModalResult.ButtonFive))">@Buttons[4]</Button>
+            }
+
+        </ModalFooter>
+    </ModalContent>
+</Modal>
