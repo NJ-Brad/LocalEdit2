@@ -1,6 +1,5 @@
 ﻿@using Blazorise.Components
 @using LocalEdit2.C4Types
-@using LocalEdit2.Modals
 
 @inherits LE_ModalBase
 <Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
@@ -24,7 +23,7 @@
 <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
     <Blazorise.ValidationSummary Label="Following error occurs..." />
 
-@*        <Field>
+        <Field>
             <FieldLabel>Item Type</FieldLabel>
             <SelectList TItem="C4TypeNamePair"
             TValue="C4TypeEnum"
@@ -35,7 +34,7 @@
             DefaultItemText="Choose node type" />
 
                 </Field>
-*@
+
 
 
     @if (@showA)
