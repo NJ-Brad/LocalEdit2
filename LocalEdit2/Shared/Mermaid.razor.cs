@@ -1,4 +1,4 @@
-﻿using BlazorPanzoom;
+﻿//using BlazorPanzoom;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -129,7 +129,7 @@ namespace LocalEdit2.Shared
             set
             {
                 _rangeValue = value;
-                _ = _panzoom?.ZoomAsync(value);
+//                _ = _panzoom?.ZoomAsync(value);
             }
         }
 
@@ -145,7 +145,7 @@ namespace LocalEdit2.Shared
         //    }
         //}
 
-        private Panzoom? _panzoom { get; set; }
+//        private Panzoom? _panzoom { get; set; }
 
         //private async Task OnZoomInClick(MouseEventArgs args)
         //{

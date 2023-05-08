@@ -1,4 +1,4 @@
-﻿@using BlazorPanzoom;
+﻿@*@using BlazorPanzoom;*@
 @inject IJSRuntime JSRuntime
 
 @* https://stackoverflow.com/questions/65044209/render-mermaid-diagram-with-blazor-webassembly-app-in-net-5-0 *@
@@ -20,16 +20,15 @@
     <div id="@Id"></div>
 </div>
 *@
-<div class="panzoom-parent">
+
+@*https://stackoverflow.com/questions/60785749/using-svgs-in-blazor-page*@
+@*https://stackoverflow.com/questions/65271267/blazor-how-to-insert-svg-tag-value-from-the-model-property*@
+
+@*<div class="panzoom-parent">
     <Panzoom @ref="_panzoom" WheelMode="@WheelMode.ZoomWithWheel">
         <div @ref="@context.ElementReference" class="panzoom" style=" height: 600px; width: 100%">
-            @*https://stackoverflow.com/questions/60785749/using-svgs-in-blazor-page*@
-            @*https://stackoverflow.com/questions/65271267/blazor-how-to-insert-svg-tag-value-from-the-model-property*@
-@*            <svg width="400" height="400">
-                @((MarkupString)@SvgText)
-            </svg>
-*@
             <div id="@Id"></div>
         </div>
     </Panzoom>
 </div>
+*@
