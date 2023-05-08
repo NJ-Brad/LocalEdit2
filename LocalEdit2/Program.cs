@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
-using MermaidJS.Blazor;
-using BlazorPanzoom;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -23,13 +21,13 @@ builder.Services
 
 builder.Services.AddBlazorDownloadFile();
 
-builder.Services.AddMermaidJS(options =>
-{
-    options.MaxTextSize = 100000;
-    options.SecurityLevel = MermaidSecurityLevels.Loose;
-    //options.SecurityLevel = MermaidSecurityLevels.AntiScript;
-});
+//builder.Services.AddMermaidJS(options =>
+//{
+//    options.MaxTextSize = 100000;
+//    options.SecurityLevel = MermaidSecurityLevels.Loose;
+//    //options.SecurityLevel = MermaidSecurityLevels.AntiScript;
+//});
 
-builder.Services.AddBlazorPanzoomServices();
+//builder.Services.AddBlazorPanzoomServices();
 
 await builder.Build().RunAsync();

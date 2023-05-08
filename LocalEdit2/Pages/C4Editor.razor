@@ -2,7 +2,6 @@
 @using LocalEdit2.C4Types
 @using Blazorise
 @using Blazorise.DataGrid
-@using MermaidJS.Blazor
 
 <h1>C4 Editor</h1>
 <hr />
@@ -175,13 +174,13 @@
         </TabPanel>
         <TabPanel Name="preview" Border="Border.Primary">
 
-@*            <h1>Context</h1>
+            <h1>Context</h1>
             <Mermaid Id="output1" @ref="MermaidOne"></Mermaid>
             <h1>Container</h1>
             <Mermaid Id="output2" @ref="MermaidTwo"></Mermaid>
             <h1>Component</h1>
             <Mermaid Id="output3" @ref="MermaidThree"></Mermaid>
-*@
+
         </TabPanel>
     </Content>
 </Tabs>
