@@ -19,4 +19,6 @@ builder.Services
     .AddBootstrap5Providers()
     .AddFontAwesomeIcons();
 
+builder.Services.AddBlazorDownloadFile();
+
 await builder.Build().RunAsync();
