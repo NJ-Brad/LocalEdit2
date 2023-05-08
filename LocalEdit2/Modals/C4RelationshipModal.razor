@@ -23,51 +23,59 @@
                     </Validation>
                     </Field>
                 *@
-                <Field>
-                    <FieldLabel>From</FieldLabel>
-                    <Validation Validator="ValidationRule.IsNotEmpty">
-                    <Select @bind-SelectedValue="@Item.From">
-                            <SelectItem >- Select an Item -</SelectItem>
-                        
-                        @foreach (var item in AllItems)
-                        {
-                            <SelectItem Value="@(item.Alias)">@(item.Text)</SelectItem>
-                        }
-                    </Select>
-                    </Validation>
-                </Field>
+                @if (Item != null)
+                {
+                    <Field>
+                        <FieldLabel>From</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                            <Select @bind-SelectedValue="@Item.From">
+                                <SelectItem >- Select an Item -</SelectItem>
 
-                <Field>
-                    <FieldLabel>To</FieldLabel>
-                    <Validation Validator="ValidationRule.IsNotEmpty">
-                    <Select @bind-SelectedValue="@Item.To">
-                        <SelectItem Disabled>- Select an Item -</SelectItem>
+                                @foreach (var item in AllItems)
+                                {
+                                    <SelectItem Value="@(item.Alias)">@(
+                                  item.Text
+                                  )</SelectItem>
+                                }
+                            </Select>
+                        </Validation>
+                    </Field>
 
-                        @foreach (var item in AllItems)
-                        {
-                            <SelectItem Value="@(item.Alias)">@(item.Text)</SelectItem>
-                        }
-                    </Select>
-                    </Validation>
-                </Field>
+                    <Field>
+                        <FieldLabel>To</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                            <Select @bind-SelectedValue="@Item.To">
+                                <SelectItem   
+                            Disabled
+                                >- Select an Item -</SelectItem>
 
-                <Field>
-                    <FieldLabel>Label</FieldLabel>
-                    <Validation Validator="ValidationRule.IsNotEmpty">
-                        <TextEdit @bind-Text="Item.Text" Placeholder="Enter text">
-                            <Feedback>
-                                <ValidationError>Please enter the text.</ValidationError>
-                            </Feedback>
-                        </TextEdit>
-                    </Validation>
-                </Field>
+                                @foreach (var item in AllItems)
+                                {
+                                    <SelectItem Value="@(item.Alias)">@(
+                                  item.Text
+                                  )</SelectItem>
+                                }
+                            </Select>
+                        </Validation>
+                    </Field>
 
-                <Field>
-                    <FieldLabel>Label</FieldLabel>
+                    <Field>
+                        <FieldLabel>Label</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                            <TextEdit @bind-Text="Item.Text" Placeholder="Enter text">
+                                <Feedback>
+                                    <ValidationError>Please enter the text.</ValidationError>
+                                </Feedback>
+                            </TextEdit>
+                        </Validation>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>Label</FieldLabel>
                         <TextEdit @bind-Text="Item.Technology" Placeholder="Enter technology">
                         </TextEdit>
-                </Field>
-
+                    </Field>
+                }
             </Validations>
         </ModalBody>
         <ModalFooter>
