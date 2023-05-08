@@ -1,0 +1,89 @@
+﻿<style>
+    .b-bar-vertical-inline .b-bar-item, .b-bar-vertical-popout .b-bar-item, .b-bar-vertical-small .b-bar-item {
+        margin: 0;
+        flex-grow: 1;
+        min-height: 40px;
+    }
+
+</style>
+
+<Bar Mode="BarMode.VerticalInline"
+     CollapseMode="BarCollapseMode.Small"
+     Breakpoint="Breakpoint.Desktop"
+     NavigationBreakpoint="Breakpoint.Tablet"
+     ThemeContrast="ThemeContrast.Dark"
+>
+    <BarToggler />
+    <BarBrand>
+        <BarItem>
+            <BarLink To="#">
+                <BarIcon IconName="IconName.Dashboard" />
+                Local Edit
+            </BarLink>
+        </BarItem>
+    </BarBrand>
+    <BarMenu>
+        <BarItem>
+            <BarLink To="">
+                <BarIcon IconName="IconName.Dashboard" />
+                Home
+            </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="countdown">
+                <BarIcon IconName="IconName.Dashboard" />
+                Meeting Countdown
+            </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="QuestionFlowEditor">
+            <BarIcon IconName="IconName.Dashboard" />
+            Question Flow Editor
+        </BarLink>
+        </BarItem>
+@*        <BarItem>
+            <BarLink To="FlowEditor">
+            <BarIcon IconName="IconName.Dashboard" />
+            Flow Editor
+        </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="SequenceEditor">
+                <BarIcon IconName="IconName.Dashboard" />
+                Sequence Editor
+            </BarLink>
+        </BarItem>
+*@
+        <BarItem>
+            <BarLink To="C4Editor">
+                <BarIcon IconName="IconName.Dashboard" />
+                C4 Editor
+            </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="PlanEditor">
+                <BarIcon IconName="IconName.Dashboard" />
+                Plan Editor
+            </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="MarkdownEditor">
+            <BarIcon IconName="IconName.Dashboard" />
+            Markdown Editor
+        </BarLink>
+        </BarItem>
+@*        <BarItem>
+            <BarLink To="fetchdata">
+                <BarIcon IconName="IconName.Dashboard" />
+                Fetch Data
+            </BarLink>
+        </BarItem>
+        <BarItem>
+            <BarLink To="counter">
+                <BarIcon IconName="IconName.Dashboard" />
+                Counter
+            </BarLink>
+        </BarItem>
+*@
+    </BarMenu>
+</Bar>
