@@ -1,0 +1,194 @@
+﻿@page "/C4Editor"
+@using LocalEdit2.C4Types
+@using Blazorise
+@using Blazorise.DataGrid
+@using MermaidJS.Blazor
+
+<h1>C4 Editor</h1>
+<hr />
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@NewC4Document">
+    <Icon Name="IconName.Star" />
+    New C4 Model
+</Button>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@LoadFile">
+    <Icon Name="IconName.FileUpload" />
+    Load
+</Button>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@SaveFile">
+    <Icon Name="IconName.FileDownload" />
+    Save
+</Button>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportFile">
+    <Icon Name="IconName.ArrowRight" />
+    Export Markdown Snippet
+</Button>
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportHtml">
+    <Icon Name="IconName.ArrowRight" />
+    Export HTML
+</Button>
+
+<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="general">General</Tab>
+        <Tab Name="model">Model</Tab>
+        <Tab Name="relations">Relations</Tab>
+        <Tab Name="preview">Preview</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="general" Border="Border.Primary">
+        </TabPanel>
+        <TabPanel Name="model" Border="Border.Primary">
+                <Div Style="margin:20px; height:300px">
+
+            <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
+                <Icon Name="IconName.Add" />
+                New
+            </Button>
+
+            @if (SelectedNode == null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Add" />
+                    New Child
+                </Button>
+            }
+            @if (SelectedNode != null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewChildItem">
+                    <Icon Name="IconName.Add" />
+                    New Child
+                </Button>
+            }
+
+            @if (SelectedNode == null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+            }
+            @if (SelectedNode != null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@EditItem">
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+            }
+
+            @if (SelectedNode == null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+            }
+            @if (SelectedNode != null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+            }
+            @*
+            <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(parentNode)">Add</Button>
+            <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(SelectedNode)">Add Child</Button>
+            *@
+            <TreeView Nodes="Document?.Model"
+                      GetChildNodes="@(item => item?.Children)"
+                      HasChildNodes="@(item => item?.Children?.Any() == true)"
+                      @bind-SelectedNode="SelectedNode"
+                      @ref="c4Tree" >
+                <NodeContent>@context?.Text</NodeContent>
+            </TreeView>
+
+            @*          SelectedNodeChanged="@((C4Item item) => SelChanged(item))" *@
+            </Div>
+        </TabPanel>
+        <TabPanel Name="relations" Border="Border.Primary">
+            <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewRelationship">
+                <Icon Name="IconName.Add" />
+                New
+            </Button>
+            @if (SelectedRelationshipRow == null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+            }
+            @if (SelectedRelationshipRow != null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowRelationshipModal">
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+            }
+
+            @if (SelectedRelationshipRow == null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+            }
+            @if (SelectedRelationshipRow != null)
+            {
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteRelationship">
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+            }
+
+            <DataGrid TItem="C4Relationship"
+                      Data="@Document?.Relationships"
+                      @bind-SelectedRow="@SelectedRelationshipRow"
+                      Responsive>
+                <DataGridColumns>
+                    <DataGridColumn Field="@nameof( C4Relationship.From )" Editable="false">
+                        <DisplayTemplate>
+                            @{
+                                C4Relationship? rel = context as C4Relationship;
+                                if (rel != null)
+                                {
+                                    if (rel.From != null)
+                                    {
+                                        @($"{DecodeFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeFlowId(rel.To)}")
+                                        <br />
+                                        <span style="padding-left:2em">@($"{rel.Technology}")</span>
+                                    }
+                                }
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+                <EmptyTemplate>
+                    <div class="box">
+                        No relations were found!
+                    </div>
+                </EmptyTemplate>
+            </DataGrid>
+
+        </TabPanel>
+        <TabPanel Name="preview" Border="Border.Primary">
+
+            <h1>Context</h1>
+            <Mermaid Id="output1" @ref="MermaidOne"></Mermaid>
+            <h1>Container</h1>
+            <Mermaid Id="output2" @ref="MermaidTwo"></Mermaid>
+            <h1>Component</h1>
+            <Mermaid Id="output3" @ref="MermaidThree"></Mermaid>
+
+        </TabPanel>
+    </Content>
+</Tabs>
+
+
+<LocalEdit2.Modals.C4ItemEditModal @ref="c4ItemModalRef" Closed="@OnC4ItemModalClosed"></LocalEdit2.Modals.C4ItemEditModal>
+
+<LocalEdit2.Modals.C4RelationshipModal @ref="C4RelationshipModalRef" Items="@Document?.Model" Closed="@OnC4RelationshipModalClosed" Item="@SelectedRelationshipRow"></LocalEdit2.Modals.C4RelationshipModal>
+
+<LocalEdit2.Modals.FileManagementModal @ref="FileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal>
