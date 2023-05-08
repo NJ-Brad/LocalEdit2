@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Modals\CountDownModal.razor.cs" />
     <Compile Remove="Modals\FlowItemModal.razor.cs" />
     <Compile Remove="Modals\FlowRelationshipModal.razor.cs" />
     <Compile Remove="Modals\GitManagementModal.razor.cs" />
@@ -26,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Modals\CountDownModal.razor" />
     <Content Remove="Modals\FlowItemModal.razor" />
     <Content Remove="Modals\FlowRelationshipModal.razor" />
     <Content Remove="Modals\GitManagementModal.razor" />

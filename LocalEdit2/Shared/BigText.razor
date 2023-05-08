@@ -1,0 +1,42 @@
+﻿@using System.Text;
+@((MarkupString)@myhtml)
+
+@code {
+    string myhtml = "<p><b>Bold</b>text</p>";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        RenderText("Hello Brad");
+    }
+
+    // inspired by https://large-type.com/#*Hello*
+
+    public void RenderText(string inputText, string color="black")
+    {
+        var text = inputText;
+        var fontSize = Math.Min(150 / text.Length, 30);
+
+        StringBuilder sb = new StringBuilder();
+
+        string spanText = "";
+
+        foreach(char chr in inputText.ToArray())
+        {
+            if (chr != ' ')
+            {
+                spanText = @$"<span style=""font-size: {fontSize}vw; color: {color}"">{chr}</span>";
+                sb.Append(spanText);
+                
+            }
+            else
+            {
+                spanText = @$"<span style=""font-size: {fontSize}vw"">&nbsp;</span>";
+                sb.Append(spanText);
+            }
+        }
+
+        myhtml = sb.ToString();
+        InvokeAsync(() => StateHasChanged());
+    }
+}
