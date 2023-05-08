@@ -1,4 +1,4 @@
-﻿namespace LocalEdit.Modals
+﻿namespace LocalEdit2.Modals
 {
     public enum ModalResult
     {

@@ -1,9 +1,9 @@
 ﻿using Blazorise;
-using LocalEdit.C4Types;
+using LocalEdit2.C4Types;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class C4RelationshipModal : LE_ModalBase
     {

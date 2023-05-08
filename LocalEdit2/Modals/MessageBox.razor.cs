@@ -1,8 +1,8 @@
 ﻿using Blazorise;
-using LocalEdit.PlanTypes;
+using LocalEdit2.PlanTypes;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class MessageBox : LE_ModalBase
     {

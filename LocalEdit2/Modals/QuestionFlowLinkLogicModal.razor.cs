@@ -1,8 +1,8 @@
 ﻿using Blazorise;
-using LocalEdit.QuestionFlowTypes;
+using LocalEdit2.QuestionFlowTypes;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class QuestionFlowLinkLogicModal : LE_ModalBase
     {

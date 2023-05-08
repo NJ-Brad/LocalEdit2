@@ -3,7 +3,7 @@ using Blazorise;
 using Microsoft.AspNetCore.Components;
 using System.Text;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class FileManagementModal : LE_ModalBase
     {

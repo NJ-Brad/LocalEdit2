@@ -1,10 +1,10 @@
 ﻿using Blazorise;
-using LocalEdit.C4Types;
+using LocalEdit2.C4Types;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
 using System.Xml.Linq;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class C4ItemEditModal : LE_ModalBase
     {

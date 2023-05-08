@@ -1,8 +1,8 @@
 ﻿using Blazorise;
-using LocalEdit.FlowTypes;
+using LocalEdit2.FlowTypes;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class FlowRelationshipModal : LE_ModalBase
     {

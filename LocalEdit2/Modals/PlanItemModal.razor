@@ -1,5 +1,5 @@
 ﻿@using Blazorise.DataGrid
-@using LocalEdit.PlanTypes
+@using LocalEdit2.PlanTypes
 @inherits LE_ModalBase
 <Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
     <ModalContent Centered>
@@ -167,5 +167,5 @@
     </ModalContent>
 </Modal>
 
-@*<LocalEdit.Modals.PlanDependencyModal @ref="planDependencyModalRef" Items=@Items Closed="@OnDependencyModalClosed" Item="@SelectedDependencyRow"></LocalEdit.Modals.PlanDependencyModal>*@
+@*<LocalEdit2.Modals.PlanDependencyModal @ref="planDependencyModalRef" Items=@Items Closed="@OnDependencyModalClosed" Item="@SelectedDependencyRow"></LocalEdit2.Modals.PlanDependencyModal>*@
 

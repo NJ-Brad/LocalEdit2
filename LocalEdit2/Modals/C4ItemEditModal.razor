@@ -1,5 +1,7 @@
 ﻿@using Blazorise.Components
-@using LocalEdit.C4Types
+@using LocalEdit2.C4Types
+@using LocalEdit2.Modals
+
 @inherits LE_ModalBase
 <Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
     <ModalContent Centered>
@@ -21,30 +23,8 @@
 @*<Validations Mode="ValidationMode.Manual">*@
 <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
     <Blazorise.ValidationSummary Label="Following error occurs..." />
-@*    <Field>
-        <FieldLabel>Name with validation</FieldLabel>
-        <Validation Validator="ValidationRule.IsNotEmpty">
-            <Blazorise.TextEdit Placeholder="Enter name (validated)">
-                <Feedback>
-                    <ValidationNone>Please enter the name.</ValidationNone>
-                    <ValidationSuccess>Name is good.</ValidationSuccess>
-                    <ValidationError>Enter valid name!</ValidationError>
-                </Feedback>
-            </Blazorise.TextEdit>
-        </Validation>
-    </Field>
-*@
-@*    <Field>
-        <FieldLabel>Name</FieldLabel>
-        <TextEdit Class="textfield-box" Placeholder="Enter name (Boxed)..." />
-    </Field>
-    <Field>
-        <FieldLabel>Name</FieldLabel>
-        <TextEdit Placeholder="Enter name..." />
-    </Field>
-*@
 
-        <Field>
+@*        <Field>
             <FieldLabel>Item Type</FieldLabel>
             <SelectList TItem="C4TypeNamePair"
             TValue="C4TypeEnum"
@@ -54,44 +34,8 @@
             @bind-SelectedValue="@SelectedNode.ItemType"
             DefaultItemText="Choose node type" />
 
-@*
-
-                    <Select @bind-SelectedValue="@SelectedNode.ItemType">
-
-
-            @if (ShouldShow(C4TypeEnum.Person))
-            {
-                <SelectItem Value=C4TypeEnum.Person>Person</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.System))
-            {
-                <SelectItem Value=C4TypeEnum.System>System</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.EnterpriseBoundary))
-            {
-                <SelectItem Value=C4TypeEnum.EnterpriseBoundary>Enterprise</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.Container))
-            {
-                <SelectItem Value=C4TypeEnum.Container>Container</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.Component))
-            {
-                <SelectItem Value=C4TypeEnum.Component>Component</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.Database))
-            {
-                <SelectItem Value=C4TypeEnum.Database>Database</SelectItem>
-            }
-            @if (ShouldShow(C4TypeEnum.Node))
-            {
-                <SelectItem Value=C4TypeEnum.Node>Node</SelectItem>
-            }
-
-            </Select>
-                    *@
                 </Field>
-
+*@
 
 
     @if (@showA)
@@ -119,17 +63,6 @@
         <TextEdit @bind-Text="SelectedNode.Technology" />
     </Field>
 
-    @*
-        <Field>
-        <FieldLabel>From</FieldLabel>
-        <TextEdit @bind-Text="SelectedNode.From" />
-        </Field>
-
-        <Field>
-        <FieldLabel>To</FieldLabel>
-        <TextEdit @bind-Text="SelectedNode.To" />
-        </Field>
-    *@
     <Field>
         <Switch TValue="bool" @bind-Checked="@SelectedNode.IsDatabase">Database</Switch>
     </Field>
@@ -138,10 +71,6 @@
         <Switch TValue="bool" @bind-Checked="@SelectedNode.IsExternal">External</Switch>
     </Field>
 
-    @*    <div class="form-group" align="right">
-        <button type="submit" class="btn btn-success">Register</button>
-        </div>
-    *@
 </Validations>
         </ModalBody>
         <ModalFooter>

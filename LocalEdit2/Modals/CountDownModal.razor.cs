@@ -1,8 +1,8 @@
 ﻿using Blazorise;
-using LocalEdit.CountDownTypes;
+using LocalEdit2.CountDownTypes;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class CountDownModal : LE_ModalBase
     {

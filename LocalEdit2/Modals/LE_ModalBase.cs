@@ -1,7 +1,7 @@
 ﻿using Blazorise;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public class LE_ModalBase : ComponentBase
     {

@@ -1,9 +1,9 @@
 ﻿using Blazorise;
-using LocalEdit.PlanTypes;
-using LocalEdit.Shared;
+using LocalEdit2.PlanTypes;
+using LocalEdit2.Shared;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class PlanDependencyModal : LE_ModalBase
     {

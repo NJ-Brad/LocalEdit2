@@ -1,8 +1,8 @@
 ﻿using Blazorise;
-using LocalEdit.SequenceTypes;
+using LocalEdit2.SequenceTypes;
 using Microsoft.AspNetCore.Components;
 
-namespace LocalEdit.Modals
+namespace LocalEdit2.Modals
 {
     public partial class SequenceRelationshipModal : LE_ModalBase
     {
