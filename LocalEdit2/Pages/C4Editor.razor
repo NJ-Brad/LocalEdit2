@@ -174,12 +174,19 @@
         </TabPanel>
         <TabPanel Name="preview" Border="Border.Primary">
 
-            <h1>Context</h1>
+@*            <h1>Context</h1>
             <Mermaid Id="output1" @ref="MermaidOne"></Mermaid>
             <h1>Container</h1>
             <Mermaid Id="output2" @ref="MermaidTwo"></Mermaid>
             <h1>Component</h1>
             <Mermaid Id="output3" @ref="MermaidThree"></Mermaid>
+*@
+            <h1>Context</h1>
+            <Mermaid GraphText="@diagramOneText"></Mermaid>
+            <h1>Container</h1>
+            <Mermaid GraphText="@diagramTwoText"></Mermaid>
+            <h1>Component</h1>
+            <Mermaid GraphText="@diagramThreeText"></Mermaid>
 
         </TabPanel>
     </Content>

@@ -1,34 +1,7 @@
-﻿@*@using BlazorPanzoom;*@
-@inject IJSRuntime JSRuntime
+﻿@* https://stackoverflow.com/questions/65044209/render-mermaid-diagram-with-blazor-webassembly-app-in-net-5-0 *@
 
-@* https://stackoverflow.com/questions/65044209/render-mermaid-diagram-with-blazor-webassembly-app-in-net-5-0 *@
-
-@*<div>
-    <button @onclick="TriggerClick">
-        Trigger Mermaid diagram render
-    </button>
-</div>
-
+@*<div style=" height: 600px; width: 100%">*@
+@*        <div style="width: 100%">*@
 <div>
-    Graph:
-    <div id="output_"></div>
     <div id="@Id"></div>
 </div>
-*@
-
-@*<div>
-    <div id="@Id"></div>
-</div>
-*@
-
-@*https://stackoverflow.com/questions/60785749/using-svgs-in-blazor-page*@
-@*https://stackoverflow.com/questions/65271267/blazor-how-to-insert-svg-tag-value-from-the-model-property*@
-
-@*<div class="panzoom-parent">
-    <Panzoom @ref="_panzoom" WheelMode="@WheelMode.ZoomWithWheel">
-        <div @ref="@context.ElementReference" class="panzoom" style=" height: 600px; width: 100%">
-            <div id="@Id"></div>
-        </div>
-    </Panzoom>
-</div>
-*@

@@ -779,6 +779,10 @@ namespace LocalEdit2.Pages
 
         string selectedTab = "general";
 
+        string diagramOneText = string.Empty;
+        string diagramTwoText = string.Empty;
+        string diagramThreeText = string.Empty;
+
         private async Task OnSelectedTabChanged(string name)
         {
             selectedTab = name;
@@ -787,13 +791,17 @@ namespace LocalEdit2.Pages
             {
                 //await GenerateMarkdown();
 
-                if(MermaidOne != null)
-                    await MermaidOne.DisplayDiagram(C4Publisher.Publish(Document, "Context"));
-                if (MermaidTwo != null)
-                    await MermaidTwo.DisplayDiagram(C4Publisher.Publish(Document, "Container"));
-                if (MermaidThree != null)
-                    await MermaidThree.DisplayDiagram(C4Publisher.Publish(Document, "Component"));
-                
+                //if(MermaidOne != null)
+                //    await MermaidOne.DisplayDiagram(C4Publisher.Publish(Document, "Context"));
+                //if (MermaidTwo != null)
+                //    await MermaidTwo.DisplayDiagram(C4Publisher.Publish(Document, "Container"));
+                //if (MermaidThree != null)
+                //    await MermaidThree.DisplayDiagram(C4Publisher.Publish(Document, "Component"));
+
+                diagramOneText = C4Publisher.Publish(Document, "Context");
+                diagramTwoText = C4Publisher.Publish(Document, "Container");
+                diagramThreeText = C4Publisher.Publish(Document, "Component");
+
                 //_ = InvokeAsync(() => StateHasChanged());
             }
 
