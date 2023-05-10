@@ -7,6 +7,7 @@ using System.Text.Json;
 using LocalEdit2.Shared;
 using System.Reflection.Metadata;
 using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace LocalEdit2.Pages
 {
@@ -61,6 +62,18 @@ namespace LocalEdit2.Pages
         C4ItemEditModal? c4ItemModalRef = null;
 
         Blazorise.TreeView.TreeView<C4Item>? c4Tree { get; set; }
+
+        bool dataHasChanged = false;
+
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (dataHasChanged)
+            {
+                dataHasChanged = false;
+                c4Tree.Nodes = Document.Model;
+            }
+            return base.OnAfterRenderAsync(firstRender);
+        }
 
         private Task ShowItemModal()
         {
@@ -557,10 +570,8 @@ namespace LocalEdit2.Pages
             }
             adding = false;
 
-            if (SelectedNode != null)
-            {
-                c4Tree.ExpandAll();
-            }
+            dataHasChanged = true;
+            c4Tree.Nodes = null;
 
             InvokeAsync(() => StateHasChanged());
 
@@ -688,6 +699,11 @@ namespace LocalEdit2.Pages
                     Document?.Model.Remove(SelectedNode);
                 }
                 SelectedNode = null;
+            }
+
+            if(Document != null) {
+                dataHasChanged = true;
+                c4Tree.Nodes = null;
             }
 
             InvokeAsync(() => StateHasChanged());

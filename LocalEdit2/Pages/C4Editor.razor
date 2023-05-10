@@ -100,7 +100,8 @@
                       GetChildNodes="@(item => item?.Children)"
                       HasChildNodes="@(item => item?.Children?.Any() == true)"
                       @bind-SelectedNode="SelectedNode"
-                      @ref="c4Tree" >
+                      @ref="c4Tree"
+                      AutoExpandAll=true>
                 <NodeContent>@context?.Text</NodeContent>
             </TreeView>
 

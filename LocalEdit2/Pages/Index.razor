@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Collections.ObjectModel;
 
 <PageTitle>Local Edit 2 - Home</PageTitle>
 
@@ -14,40 +15,73 @@ And this https://docs.github.com/en/pages/getting-started-with-github-pages/crea
 
 @*<WheelZoom Image="/mire.png" width="500" height="500" />*@
 
-<Accordion>
-    <Collapse Visible="@collapse1Visible">
-        <CollapseHeader>
-            <Heading Size="HeadingSize.Is5">
-                <AccordionToggle>Switch 1</AccordionToggle>
-            </Heading>
-        </CollapseHeader>
-        <CollapseBody>
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-    <Collapse Visible="@collapse2Visible">
-        <CollapseHeader>
-            <Heading Size="HeadingSize.Is5">
-                <AccordionToggle>Switch 2</AccordionToggle>
-            </Heading>
-        </CollapseHeader>
-        <CollapseBody>
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    <Collapse Visible="@collapse3Visible">
-                        <CollapseHeader>
-                            <Heading Size="HeadingSize.Is5">
-                                <AccordionToggle>Switch 3</AccordionToggle>
-                            </Heading>
-                        </CollapseHeader>
-                        <CollapseBody>
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </CollapseBody>
-                    </Collapse>
-                </CollapseBody>
-    </Collapse>
-        </CollapseBody>
-    </Collapse>
-</Accordion>
+<Row>
+    <Column>
+        <Button Clicked="@OnAddNodeClick" Color="Color.Primary">Add node</Button>
+    </Column>
+    <Column>
+        <TreeView Nodes="Items"
+                  GetChildNodes="@(item => item.Children)"
+                  HasChildNodes="@(item => item.Children?.Any() == true)"
+        @bind-SelectedNode="selectedNode"
+        @bind-ExpandedNodes="expandedNodes">
+            <NodeContent>
+                <Icon Name="IconName.Folder" />
+                @context.Text
+            </NodeContent>
+        </TreeView>
+    </Column>
+</Row>
 @code {
-    bool collapse1Visible = true;
-    bool collapse2Visible = false;
-    bool collapse3Visible = false;
+    private Task OnAddNodeClick()
+    {
+        //Items.Add(new Item { Text = $"Item {Items.Count + 1}" });
+
+        if (Items[0].Children == null)
+        {
+            Items[0].Children = new[] { new Item { Text = $"Item a 1" } };
+        }
+        else
+        {
+            Items[0].Children.Append<Item>(new Item { Text = $"Item a {Items[0].Children.Count() + 1}" });
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public class Item
+    {
+        public string Text { get; set; }
+        public IEnumerable<Item> Children { get; set; }
+    }
+
+    ObservableCollection<Item> Items = new()
+    {
+        new Item { Text = "Item 1" },
+        new Item
+        {
+            Text = "Item 2",
+            Children = new []
+            {
+                new Item { Text = "Item 2.1" },
+                new Item
+                {
+                    Text = "Item 2.2",
+                    Children = new []
+                    {
+                        new Item { Text = "Item 2.2.1" },
+                        new Item { Text = "Item 2.2.2" },
+                        new Item { Text = "Item 2.2.3" },
+                        new Item { Text = "Item 2.2.4" }
+                    }
+                },
+                new Item { Text = "Item 2.3" },
+                new Item { Text = "Item 2.4" }
+            }
+        },
+        new Item { Text = "Item 3" },
+    };
+
+    IList<Item> expandedNodes = new List<Item>();
+    Item selectedNode;
 }
