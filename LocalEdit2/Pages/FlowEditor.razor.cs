@@ -42,6 +42,7 @@ namespace LocalEdit2.Pages
 
         //Mermaid? MermaidOne { get; set; }
         public string diagramOneText { get; set; } = string.Empty;
+        public string diagramTwoText { get; set; } = string.Empty;
 
         public Validations? validations { get; set; }
 
@@ -145,6 +146,13 @@ namespace LocalEdit2.Pages
                 await UpdatePreview();
             }
 
+            if (selectedTab == "preview2")
+            {
+                //GenerateMarkdown();
+
+                await UpdatePreview2();
+            }
+
             //return Task.CompletedTask;
         }
 
@@ -176,7 +184,12 @@ namespace LocalEdit2.Pages
 
         }
 
-        private Task NewQuestionFlow()
+        private async Task UpdatePreview2()
+        {
+            diagramTwoText = SequencePublisher.Publish(Document);
+        }
+
+            private Task NewQuestionFlow()
         {
             if (FileManagementModalRef != null)
                 FileManagementModalRef.Name = "New_QuestionFlow.json";

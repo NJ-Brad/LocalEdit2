@@ -53,7 +53,8 @@
     <Items>
         <Tab Name="general">General</Tab>
         <Tab Name="model">Model</Tab>
-        <Tab Name="preview">Preview</Tab>
+        <Tab Name="preview">Preview (Flow Diagram)</Tab>
+        <Tab Name="preview2">Preview (Sequence Diagram)</Tab>
     </Items>
     <Content>
         <TabPanel Name="general"  Border="Border.Primary">
@@ -256,7 +257,10 @@
 *@
        <Mermaid GraphText="@diagramOneText"></Mermaid>
 </TabPanel>
-    </Content>
+            <TabPanel Name="preview2" Border="Border.Primary">
+                <Mermaid GraphText="@diagramTwoText"></Mermaid>
+            </TabPanel>
+        </Content>
 </Tabs>
 </Div>
 @*

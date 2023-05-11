@@ -105,23 +105,22 @@ Relations
                 <DataGrid TItem="FlowRelationship"
                           Data="@Item?.NextQuestions"
                           @bind-SelectedRow="@SelectedRelationshipRow"
-                          Responsive>
+                              RowDoubleClicked="@ShowRelationshipModal"
+                            Responsive>
                     <DataGridColumns>
-                        <DataGridColumn Field="@nameof( FlowRelationship.Label )" Editable="false" />
-
                         <DataGridColumn Field="@nameof( FlowRelationship.To )" Editable="false">
                             <DisplayTemplate>
                                 @{
                                     FlowRelationship? rel = context as FlowRelationship;
                                     if (rel != null)
                                     {
-                                        @($"{DecodeQuestionFlowId(rel.To)}")
-                                        //if (rel.From != null)
-                                        //{
-                                        //    @($"{DecodeQuestionFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeQuestionFlowId(rel.To)}")
-                                        //    <br />
-                                        //    <span style="padding-left:2em">@($"{rel.Technology}")</span>
-                                        //}
+                                        //@($"{DecodeFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeFlowId(rel.To)}")
+                                        //<br />
+                                        //<span style="padding-left:2em">@($"{rel.Label}")</span>
+
+                                            @($"{DecodeFlowId(rel.Label)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeFlowId(rel.To)}")
+
+                                        //@($"{DecodeQuestionFlowId(rel.To)}")
                                     }
                                 }
                             </DisplayTemplate>
@@ -135,79 +134,6 @@ Relations
                         </div>
                     </EmptyTemplate>
                 </DataGrid>
-@*
-                <hr />
- <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
-                Link Logic
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewLinkLogic">
-                    <Icon Name="IconName.Add" />
-                    New
-                </Button>
-                @if (SelectedLinkLogicRow == null)
-                {
-                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.Edit" />
-                    Edit
-                </Button>
-                }
-                @if (SelectedLinkLogicRow != null)
-                {
-                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowLinkLogicModal">
-                        <Icon Name="IconName.Edit" />
-                        Edit
-                    </Button>
-                }
-
-                @if (SelectedLinkLogicRow == null)
-                {
-                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.Delete" />
-                    Delete
-                </Button>
-                }
-                @if (SelectedLinkLogicRow != null)
-                {
-                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteLinkLogic">
-                        <Icon Name="IconName.Delete" />
-                        Delete
-                    </Button>
-                }
-                </Span>
-
-                <DataGrid TItem="LinkLogic"
-                          Data="@Item?.linkLogic"
-                          @bind-SelectedRow="@SelectedLinkLogicRow"
-Responsive>
-                    <DataGridColumns>
-                        <DataGridColumn Field="@nameof( LinkLogic.asString )" Editable="false" />
-
-                        <DataGridColumn Field="@nameof( LinkLogic.jumpToItemId )" Editable="false">
-                            <DisplayTemplate>
-                                @{
-                                    LinkLogic? rel = context as LinkLogic;
-                                    if (rel != null)
-                                    {
-                                        @($"{DecodeQuestionFlowId(rel.jumpToItemId)}")
-                                        //if (rel.From != null)
-                                        //{
-                                        //    @($"{DecodeQuestionFlowId(rel.From)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeQuestionFlowId(rel.To)}")
-                                        //    <br />
-                                        //    <span style="padding-left:2em">@($"{rel.Technology}")</span>
-                                        //}
-                                    }
-                                }
-                            </DisplayTemplate>
-                        </DataGridColumn>
-
-
-                    </DataGridColumns>
-                    <EmptyTemplate>
-                        <div class="box">
-                            No logical links were found!
-                        </div>
-                    </EmptyTemplate>
-                </DataGrid>
-                *@
                 </Validations>
             }
         </ModalBody>
@@ -219,4 +145,3 @@ Responsive>
 </Modal>
 
 <LocalEdit2.Modals.FlowRelationshipModal @ref="FlowRelationshipModalRef" Items="@Items" Closed="@OnFlowRelationshipModalClosed" Item="@SelectedRelationshipRow"></LocalEdit2.Modals.FlowRelationshipModal>
-<LocalEdit2.Modals.FlowLinkLogicModal @ref="FlowLinkLogicModalRef" Items="@Items" Closed="@OnFlowLinkLogicModalClosed" Item="@SelectedLinkLogicRow"></LocalEdit2.Modals.FlowLinkLogicModal>

@@ -17,7 +17,6 @@ namespace LocalEdit2.Modals
 
         // setting to null allows the toolbar buttons to enable/disable properly
         public LinkLogic? SelectedLinkLogicRow { get; set; } = null;
-        private FlowLinkLogicModal? FlowLinkLogicModalRef;
 
         bool adding = false;
 
@@ -38,20 +37,6 @@ namespace LocalEdit2.Modals
             return Task.CompletedTask;
         }
 
-        private Task ShowLinkLogicModal()
-        {
-            if (SelectedLinkLogicRow == null)
-            {
-                return Task.CompletedTask;
-            }
-            if (FlowLinkLogicModalRef != null)
-            {
-                FlowLinkLogicModalRef?.ShowModal();
-            }
-
-            return Task.CompletedTask;
-        }
-
         private Task AddNewRelationship()
         {
             FlowRelationship newRelationship = new()
@@ -67,21 +52,7 @@ namespace LocalEdit2.Modals
             return ShowRelationshipModal();
         }
 
-        private Task AddNewLinkLogic()
-        {
-            LinkLogic newLinkLogic = new()
-            {
-                //Label = "New Relationship"
-            };
-
-            SelectedLinkLogicRow = newLinkLogic;
-            Item?.linkLogic?.Add(newLinkLogic);
-            adding = true;
-
-            return ShowLinkLogicModal();
-        }
-
-        private string DecodeQuestionFlowId(string id)
+        private string DecodeFlowId(string id)
         {
             string rtnVal = id;
 
@@ -148,27 +119,5 @@ namespace LocalEdit2.Modals
 
             return Task.CompletedTask;
         }
-
-        private Task OnFlowLinkLogicModalClosed()
-        {
-            if (adding)
-            {
-                // remove the new item, if add was cancelled
-                if (FlowLinkLogicModalRef?.Result == ModalResult.Cancel)
-                {
-                    if (SelectedLinkLogicRow != null)
-                    {
-                        Item?.linkLogic?.Remove(SelectedLinkLogicRow);
-                        SelectedLinkLogicRow = null;
-                    }
-                }
-            }
-            adding = false;
-
-            InvokeAsync(() => StateHasChanged());
-
-            return Task.CompletedTask;
-        }
-
     }
 }
