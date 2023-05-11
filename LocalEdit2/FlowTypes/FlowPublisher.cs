@@ -38,22 +38,35 @@ namespace LocalEdit2.FlowTypes
                     prevItemId = "";
                 }
 
-                if ((item.linkLogic == null) || (item.linkLogic.Count == 0))
+                if ((item.NextQuestions == null) || (item.NextQuestions.Count == 0))
                 {
                     prevItemId = Utils.VOD(item.id);
                 }
 
-                if (item.linkLogic != null)
+                if (item.NextQuestions != null)
                 {
-                    foreach (LinkLogic linkLogic in item.linkLogic)
+                    foreach (FlowRelationship rel in item.NextQuestions)
                     {
-                        FlowRelationship rel = new();
-                        rel.From = Utils.VOD(item.id);
-                        rel.To = linkLogic.jumpToItemId;
-                        rel.Label = linkLogic.asString;
                         sb.Append(MermaidConnection(rel));
                     }
                 }
+
+                //if ((item.linkLogic == null) || (item.linkLogic.Count == 0))
+                //{
+                //    prevItemId = Utils.VOD(item.id);
+                //}
+
+                //if (item.linkLogic != null)
+                //{
+                //    foreach (LinkLogic linkLogic in item.linkLogic)
+                //    {
+                //        FlowRelationship rel = new();
+                //        rel.From = Utils.VOD(item.id);
+                //        rel.To = linkLogic.jumpToItemId;
+                //        rel.Label = linkLogic.asString;
+                //        sb.Append(MermaidConnection(rel));
+                //    }
+                //}
             }
 
             return sb.ToString();

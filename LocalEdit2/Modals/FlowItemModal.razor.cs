@@ -7,12 +7,12 @@ namespace LocalEdit2.Modals
     public partial class FlowItemModal : LE_ModalBase
     {
         [Parameter]
-        public FlowItem Item { get; set; } = new();
+        public FlowItem Item { get; set; } = null;
 
         [Parameter]
         public List<FlowItem> Items { get; set; } = new();
 
-        public FlowRelationship? SelectedRelationshipRow { get; set; } = new();
+        public FlowRelationship? SelectedRelationshipRow { get; set; } = null;
         private FlowRelationshipModal? FlowRelationshipModalRef;
 
         // setting to null allows the toolbar buttons to enable/disable properly
@@ -56,6 +56,7 @@ namespace LocalEdit2.Modals
         {
             FlowRelationship newRelationship = new()
             {
+                From = Item?.id,
                 Label = "New Relationship"
             };
 

@@ -16,7 +16,6 @@ namespace LocalEdit2.Modals
 
         private List<C4TypeNamePair> c4Types { get; set; } = new();
 
-
         protected override void OnParametersSet()
         {
             //if ((itemTypeCombo != null) && (itemTypeCombo.SelectedValue != null))

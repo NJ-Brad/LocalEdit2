@@ -5,7 +5,7 @@
 <Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
     <ModalContent Centered>
         <ModalHeader>
-            <ModalTitle>Question Flow Item Edit</ModalTitle>
+            <ModalTitle>Flow Item Edit</ModalTitle>
             <CloseButton />
         </ModalHeader>
         <ModalBody>
@@ -63,8 +63,9 @@
                     <TextEdit @bind-Text="item.Description" Placeholder="Enter description" />
                 </Field>
 *@
-@*<hr />
-                <h2>Relations</h2>
+<hr />
+ <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+Relations
 
                 <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewRelationship">
                     <Icon Name="IconName.Add" />
@@ -99,6 +100,7 @@
                         Delete
                     </Button>
                 }
+                </Span>
 
                 <DataGrid TItem="FlowRelationship"
                           Data="@Item?.NextQuestions"
@@ -133,7 +135,7 @@
                         </div>
                     </EmptyTemplate>
                 </DataGrid>
-*@
+@*
                 <hr />
  <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
                 Link Logic
@@ -178,7 +180,6 @@
 Responsive>
                     <DataGridColumns>
                         <DataGridColumn Field="@nameof( LinkLogic.asString )" Editable="false" />
-                        @*                        <DataGridColumn Field="@nameof( FlowRelationship.To )" Editable="false" />*@
 
                         <DataGridColumn Field="@nameof( LinkLogic.jumpToItemId )" Editable="false">
                             <DisplayTemplate>
@@ -206,7 +207,8 @@ Responsive>
                         </div>
                     </EmptyTemplate>
                 </DataGrid>
-            </Validations>
+                *@
+                </Validations>
             }
         </ModalBody>
         <ModalFooter>

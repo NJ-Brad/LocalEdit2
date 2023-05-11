@@ -26,12 +26,12 @@
         <Field>
             <FieldLabel>Item Type</FieldLabel>
             <SelectList TItem="C4TypeNamePair"
-            TValue="C4TypeEnum"
-            Data="@c4Types"
-            TextField="@((item)=>item.Description)"
-            ValueField="@((item)=>item.Value)"
-            @bind-SelectedValue="@SelectedNode.ItemType"
-            DefaultItemText="Choose node type" />
+                TValue="C4TypeEnum"
+                Data="@c4Types"
+                TextField="@((item)=>item.Description)"
+                ValueField="@((item)=>item.Value)"
+                @bind-SelectedValue="@SelectedNode.ItemType"
+                DefaultItemText="Choose node type" />
 
                 </Field>
 

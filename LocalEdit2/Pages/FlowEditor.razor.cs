@@ -41,7 +41,7 @@ namespace LocalEdit2.Pages
         //}
 
         //Mermaid? MermaidOne { get; set; }
-        string diagramOneText { get; set; }
+        public string diagramOneText { get; set; } = string.Empty;
 
         public Validations? validations { get; set; }
 
@@ -159,6 +159,21 @@ namespace LocalEdit2.Pages
 
             //    await MermaidOne.DisplayDiagram(FlowPublisher.Publish(Document));
             //}
+
+    //        diagramOneText = @"graph TD
+    //Q1[""Question One""]
+    //Q2[""Question Two""]
+    //Q3[""Question Three""]
+    //Q4[""Question Four""]
+    //Q1--""New Relationship""-->Q2
+    //";
+
+    //        diagramOneText = @"graph TD
+    //Q1[""Question One""]
+    //Q2[""Question Two""]
+    //Q3[""Question Three""]
+    //Q4[""Question Four""]";
+
         }
 
         private Task NewQuestionFlow()
