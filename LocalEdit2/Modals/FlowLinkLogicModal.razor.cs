@@ -1,16 +1,16 @@
 ﻿using Blazorise;
-using LocalEdit2.QuestionFlowTypes;
+using LocalEdit2.FlowTypes;
 using Microsoft.AspNetCore.Components;
 
 namespace LocalEdit2.Modals
 {
-    public partial class QuestionFlowLinkLogicModal : LE_ModalBase
+    public partial class FlowLinkLogicModal : LE_ModalBase
     {
         [Parameter]
         public LinkLogic Item { get; set; } = new();
 
         [Parameter]
-        public List<QuestionFlowItem> Items { get; set; } = new();
+        public List<FlowItem> Items { get; set; } = new();
 
     }
 }

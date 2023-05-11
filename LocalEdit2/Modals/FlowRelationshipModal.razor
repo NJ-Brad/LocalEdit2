@@ -2,7 +2,7 @@
 <Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
     <ModalContent Centered>
         <ModalHeader>
-            <ModalTitle>Flow Relationship Edit</ModalTitle>
+            <ModalTitle>Question Flow Relationship Edit</ModalTitle>
             <CloseButton />
         </ModalHeader>
         <ModalBody>
@@ -23,46 +23,34 @@
                     </Validation>
                     </Field>
                 *@
-                <Field>
-                    <FieldLabel>From</FieldLabel>
-@*                    <TextEdit @bind-Text="item.From" Placeholder="Enter source" />
-*@
-                    <Select @bind-SelectedValue="@Item.From">
-                        @foreach (var item in Items)
-                        {
-                            <SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>
-                        }
 
-@*    <SelectItem Value="1">One</SelectItem>
-    <SelectItem Value="2">Two</SelectItem>
-    <SelectItem Value="3">Three</SelectItem>
-    <SelectItem Value="4">Four</SelectItem>
-*@
-                    </Select>
+                <Field>
+                    <FieldLabel>Label</FieldLabel>
+                    <Validation Validator="ValidationRule.IsNotEmpty">
+                        <TextEdit @bind-Text="Item.Label" Placeholder="Enter condition">
+                            <Feedback>
+                                <ValidationError>Please enter the condition.</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Validation>
                 </Field>
 
                 <Field>
                     <FieldLabel>To</FieldLabel>
                     @*<TextEdit @bind-Text="item.To" Placeholder="Enter destination" />*@
 
+                    <Validation Validator="ValidationRule.IsNotEmpty">
                     <Select @bind-SelectedValue="@Item.To">
+                        <SelectItem Value="@string.Empty" Disabled>- Select an Item -</SelectItem>
                         @foreach (var item in Items)
                         {
-                            <SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>
-                        }
+@*                            <SelectItem Value="@(item.Label)">@(item.Label)</SelectItem>*@
+                                <SelectItem Value="@(item.id)">@(item.title)</SelectItem>
+                            }
                     </Select>
-                </Field>
-
-                <Field>
-                    <FieldLabel>Label</FieldLabel>
-                    <Validation Validator="ValidationRule.IsNotEmpty">
-                        <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
-                            <Feedback>
-                                <ValidationError>Please enter the label.</ValidationError>
-                            </Feedback>
-                        </TextEdit>
                     </Validation>
                 </Field>
+
 
             </Validations>
         </ModalBody>
