@@ -5,8 +5,6 @@ VisualStudioVersion = 17.6.33617.297
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalEdit2", "LocalEdit2\LocalEdit2.csproj", "{03454574-D5D8-4607-BF19-A00966786CE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPanzoom", "BlazorPanzoom\BlazorPanzoom.csproj", "{AD5234EA-CF26-4636-997D-1C4938246AB7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{03454574-D5D8-4607-BF19-A00966786CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03454574-D5D8-4607-BF19-A00966786CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03454574-D5D8-4607-BF19-A00966786CE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD5234EA-CF26-4636-997D-1C4938246AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD5234EA-CF26-4636-997D-1C4938246AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD5234EA-CF26-4636-997D-1C4938246AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD5234EA-CF26-4636-997D-1C4938246AB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -41,71 +41,166 @@
         <TabPanel Name="general" Border="Border.Primary">
         </TabPanel>
         <TabPanel Name="model" Border="Border.Primary">
-                <Div Style="margin:20px; height:300px">
+            <Div Style="margin:20px; height:300px">
 
-            <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
-                <Icon Name="IconName.Add" />
-                New
-            </Button>
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
+                    <Icon Name="IconName.Add" />
+                    New
+                </Button>
 
-            @if (SelectedNode == null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                @if (SelectedNode == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
                     <Icon Name="IconName.Add" />
                     New Child
                 </Button>
-            }
-            @if (SelectedNode != null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewChildItem">
+                }
+                @if (SelectedNode != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewChildItem">
+                        <Icon Name="IconName.Add" />
+                        New Child
+                    </Button>
+                }
+
+                @if (SelectedNode == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+                }
+                @if (SelectedNode != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@EditItem">
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                }
+
+                @if (SelectedNode == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+                }
+                @if (SelectedNode != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                }
+                @*
+                <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(parentNode)">Add</Button>
+                <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(SelectedNode)">Add Child</Button>
+                *@
+                <TreeView Nodes="Document?.Model"
+                          GetChildNodes="@(item => item?.Children)"
+                          HasChildNodes="@(item => item?.Children?.Any() == true)"
+                @bind-SelectedNode="SelectedNode"
+                @ref="c4Tree"
+                          AutoExpandAll=true>
+                    <NodeContent>@context?.Text</NodeContent>
+                </TreeView>
+
+                @*FlatModel*@
+
+                @*                @bind-SelectedRow="@SelectedRelationshipRow"*@
+
+                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewFlatItem">
+                    <Icon Name="IconName.Add" />
+                    New
+                </Button>
+
+                @if (selectedFlatItem == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
                     <Icon Name="IconName.Add" />
                     New Child
                 </Button>
-            }
+                }
+                @if (selectedFlatItem != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewChildFlatItem">
+                        <Icon Name="IconName.Add" />
+                        New Child
+                    </Button>
+                }
 
-            @if (SelectedNode == null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                @if (selectedFlatItem == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
                     <Icon Name="IconName.Edit" />
                     Edit
                 </Button>
-            }
-            @if (SelectedNode != null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@EditItem">
-                    <Icon Name="IconName.Edit" />
-                    Edit
-                </Button>
-            }
+                }
+                @if (selectedFlatItem != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@EditFlatItem">
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                }
 
-            @if (SelectedNode == null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                @if (selectedFlatItem == null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Disabled>
                     <Icon Name="IconName.Delete" />
                     Delete
                 </Button>
-            }
-            @if (SelectedNode != null)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
-                    <Icon Name="IconName.Delete" />
-                    Delete
-                </Button>
-            }
-            @*
-            <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(parentNode)">Add</Button>
-            <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(SelectedNode)">Add Child</Button>
-            *@
-            <TreeView Nodes="Document?.Model"
-                      GetChildNodes="@(item => item?.Children)"
-                      HasChildNodes="@(item => item?.Children?.Any() == true)"
-                      @bind-SelectedNode="SelectedNode"
-                      @ref="c4Tree"
-                      AutoExpandAll=true>
-                <NodeContent>@context?.Text</NodeContent>
-            </TreeView>
+                }
+                @if (selectedFlatItem != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteFlatItem">
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                }
 
-            @*          SelectedNodeChanged="@((C4Item item) => SelChanged(item))" *@
+                <br />
+                @if (SelectedFlatItem != null)
+                {
+                    @SelectedFlatItem.Text
+                }
+                @if (SelectedFlatItem == null)
+                {
+                    @("No Selection")
+                }
+                <br />
+
+                <DataGrid TItem="C4FlatItem"
+                          Data="@Document?.FlatModel"
+                          @bind-SelectedRow="@SelectedFlatItem"
+                          SelectedRowStyling="@OnSelectedRowStyling"
+                          Responsive
+                        ShowPager=false
+                        PageSize="50"
+                        FixedHeader FixedHeaderDataGridHeight="300px">
+                    <DataGridColumns>
+                        <DataGridColumn Field="@nameof( C4FlatItem.Text )" Editable="false">
+                            <DisplayTemplate>
+                                @{
+                                    C4FlatItem? item = context as C4FlatItem;
+                                    if (item != null)
+                                    {
+                                        <span style="@StyleForLevel(item.Level)">@($"{item.Text}")</span>
+                                    }
+                                }
+                            </DisplayTemplate>
+
+                        </DataGridColumn>
+                    </DataGridColumns>
+                    <EmptyTemplate>
+                        <div class="box">
+                            No items were found!
+                        </div>
+                    </EmptyTemplate>
+                </DataGrid>
+
+
+                @*          SelectedNodeChanged="@((C4Item item) => SelChanged(item))" *@
             </Div>
         </TabPanel>
         <TabPanel Name="relations" Border="Border.Primary">
@@ -116,9 +211,9 @@
             @if (SelectedRelationshipRow == null)
             {
                 <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.Edit" />
-                    Edit
-                </Button>
+                <Icon Name="IconName.Edit" />
+                Edit
+            </Button>
             }
             @if (SelectedRelationshipRow != null)
             {
@@ -131,9 +226,9 @@
             @if (SelectedRelationshipRow == null)
             {
                 <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.Delete" />
-                    Delete
-                </Button>
+                <Icon Name="IconName.Delete" />
+                Delete
+            </Button>
             }
             @if (SelectedRelationshipRow != null)
             {
@@ -145,8 +240,8 @@
 
             <DataGrid TItem="C4Relationship"
                       Data="@Document?.Relationships"
-                      @bind-SelectedRow="@SelectedRelationshipRow"
-                      Responsive>
+            @bind-SelectedRow="@SelectedRelationshipRow"
+                        Responsive>
                 <DataGridColumns>
                     <DataGridColumn Field="@nameof( C4Relationship.From )" Editable="false">
                         <DisplayTemplate>
@@ -175,13 +270,13 @@
         </TabPanel>
         <TabPanel Name="preview" Border="Border.Primary">
 
-@*            <h1>Context</h1>
+            @*            <h1>Context</h1>
             <Mermaid Id="output1" @ref="MermaidOne"></Mermaid>
             <h1>Container</h1>
             <Mermaid Id="output2" @ref="MermaidTwo"></Mermaid>
             <h1>Component</h1>
             <Mermaid Id="output3" @ref="MermaidThree"></Mermaid>
-*@
+            *@
             <h1>Context</h1>
             <Mermaid GraphText="@diagramOneText"></Mermaid>
             <h1>Container</h1>
@@ -195,6 +290,7 @@
 
 
 <LocalEdit2.Modals.C4ItemEditModal @ref="c4ItemModalRef" Closed="@OnC4ItemModalClosed"></LocalEdit2.Modals.C4ItemEditModal>
+<LocalEdit2.Modals.C4FlatItemEditModal @ref="c4FlatItemModalRef" Closed="@OnC4FlatItemModalClosed"></LocalEdit2.Modals.C4FlatItemEditModal>
 
 <LocalEdit2.Modals.C4RelationshipModal @ref="C4RelationshipModalRef" Items="@Document?.Model" Closed="@OnC4RelationshipModalClosed" Item="@SelectedRelationshipRow"></LocalEdit2.Modals.C4RelationshipModal>
 

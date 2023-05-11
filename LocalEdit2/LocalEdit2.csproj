@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="C4Types\C4PublisherLegacy.cs" />
     <Compile Remove="Modals\FlowItemModal.razor.cs" />
     <Compile Remove="Modals\FlowRelationshipModal.razor.cs" />
     <Compile Remove="Modals\GitManagementModal.razor.cs" />

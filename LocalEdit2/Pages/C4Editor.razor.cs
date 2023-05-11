@@ -8,6 +8,10 @@ using LocalEdit2.Shared;
 using System.Reflection.Metadata;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
+using static LocalEdit2.Pages.Index;
+using System;
+using Blazorise.DataGrid;
+using System.Xml.Schema;
 
 namespace LocalEdit2.Pages
 {
@@ -60,10 +64,16 @@ namespace LocalEdit2.Pages
         C4Workspace? Document { get; set; } = new C4Workspace();
 //        MarkdownRenderer markdownRef;
         C4ItemEditModal? c4ItemModalRef = null;
+        C4FlatItemEditModal? c4FlatItemModalRef = null;
 
         Blazorise.TreeView.TreeView<C4Item>? c4Tree { get; set; }
 
         bool dataHasChanged = false;
+
+        protected override Task OnInitializedAsync()
+        {
+            return base.OnInitializedAsync();
+        }
 
         protected override Task OnAfterRenderAsync(bool firstRender)
         {
@@ -92,6 +102,24 @@ namespace LocalEdit2.Pages
             }
 
             //InvokeAsync(() => StateHasChanged());
+
+            return Task.CompletedTask;
+        }
+
+        private Task ShowFlatItemModal(C4TypeEnum parentType)
+        {
+            //if (selectedFlatItem == null)
+            //{
+            //    return Task.CompletedTask;
+            //}
+
+            if (c4FlatItemModalRef != null)
+            {
+                c4FlatItemModalRef.ParentType = parentType;
+                c4FlatItemModalRef.SelectedNode = SelectedFlatItem;
+
+                c4FlatItemModalRef?.ShowModal();
+            }
 
             return Task.CompletedTask;
         }
@@ -148,6 +176,38 @@ namespace LocalEdit2.Pages
             //return Task.CompletedTask;
         }
 
+        private Task AddNewFlatItem()
+        {
+            if (Document == null)
+                return Task.CompletedTask;
+
+            // Add a new item, at this level, after this item and before the next item at this level
+            int insertLoc = Document.FlatModel.GetAddIndex(selectedFlatItem);
+
+            C4FlatItem newItem = new();
+            newItem.Level = selectedFlatItem.Level;
+            newItem.ParentAlias = selectedFlatItem.ParentAlias;
+            if (insertLoc != -1)
+            {
+                Document.FlatModel.Insert(insertLoc, newItem);
+            }
+            else
+            {
+                Document.FlatModel.Add(newItem);
+            }
+
+            C4FlatItem? parent = selectedFlatItem == null ? null : Document.FlatModel.FindByAlias(selectedFlatItem.ParentAlias);
+            
+
+            C4TypeEnum parentType = parent == null ? C4TypeEnum.Unknown : parent.ItemType;
+            SelectedFlatItem = newItem;
+            adding = true;
+
+//            InvokeAsync(() => StateHasChanged());
+
+            return ShowFlatItemModal(parentType);
+        }
+
         private Task AddNewChildItem()
         {
             selectedNodeAtTimeOfClick = SelectedNode;
@@ -169,6 +229,37 @@ namespace LocalEdit2.Pages
             return ShowItemModal();
         }
 
+        private Task AddNewChildFlatItem()
+        {
+            if (Document == null)
+                return Task.CompletedTask;
+
+            // Add a new item, at this level, after this item and before the next item at this level
+            int insertLoc = Document.FlatModel.GetAddChildIndex(selectedFlatItem);
+
+            C4FlatItem newItem = new();
+            newItem.Level = selectedFlatItem.Level + 1;
+            newItem.ParentAlias = selectedFlatItem.Alias;
+            if (insertLoc != -1)
+            {
+                Document.FlatModel.Insert(insertLoc, newItem);
+            }
+            else
+            {
+                Document.FlatModel.Add(newItem);
+            }
+
+            C4TypeEnum parentType = SelectedFlatItem == null ? C4TypeEnum.Unknown : SelectedFlatItem.ItemType;
+
+            SelectedFlatItem = newItem;
+            adding = true;
+
+            //            InvokeAsync(() => StateHasChanged());
+
+            // use the current item as the parent item, for item type filtering
+            return ShowFlatItemModal(parentType);
+        }
+
         private Task EditItem()
         {
             selectedNodeAtTimeOfClick = SelectedNode;
@@ -182,6 +273,15 @@ namespace LocalEdit2.Pages
             return ShowItemModal();
         }
 
+
+        private Task EditFlatItem()
+        {
+            C4FlatItem? parent = selectedFlatItem == null ? null : Document.FlatModel.FindByAlias(selectedFlatItem.ParentAlias);
+
+            C4TypeEnum parentType = parent == null ? C4TypeEnum.Unknown : parent.ItemType;
+
+            return ShowFlatItemModal(parentType);
+        }
 
         private C4Item? FindParent(C4Item? NodeInQuestion, IEnumerable<C4Item> collection)
         {
@@ -216,48 +316,6 @@ namespace LocalEdit2.Pages
             return parentNode;
         }
 
-        //IEnumerable<C4Item> C4Items1 = new[]
-        //{
-        //    C4TestData.InternalPerson,
-        //    C4TestData.ExternalPerson,
-        //    C4TestData.Boundary,
-        //    C4TestData.SystemBoundary,
-        //    C4TestData.EnterpriseBoundary,
-        //    C4TestData.ContainerBoundary,
-        //    C4TestData.Component,
-        //    C4TestData.Database,
-        //    C4TestData.Container,
-        //    C4TestData.Node,
-        //    C4TestData.InternalSystem,
-        //    C4TestData.ExternalSystem,
-        //    C4TestData.InternalDatabaseSystem,
-        //    C4TestData.ExternalDatabaseSystem
-        //};
-
-
-        //    IEnumerable<Item> Items = new[]
-        //       {
-        //    new Item { Text = "Item 1" },
-        //    new Item {
-        //        Text = "Item 2",
-        //        Children = new []
-        //{
-        //            new Item { Text = "Item 2.1" },
-        //            new Item { Text = "Item 2.2", Children = new []
-        //    {
-        //                new Item { Text = "Item 2.2.1" },
-        //                new Item { Text = "Item 2.2.2" },
-        //                new Item { Text = "Item 2.2.3" },
-        //                new Item { Text = "Item 2.2.4" }
-        //            }
-        //        },
-        //        new Item { Text = "Item 2.3" },
-        //        new Item { Text = "Item 2.4" }
-        //        }
-        //    },
-        //    new Item { Text = "Item 3" },
-        //};
-
         private Task NewC4Document()
         {
             Document = new()
@@ -268,7 +326,7 @@ namespace LocalEdit2.Pages
             new C4Item{ItemType=C4TypeEnum.Person, Text="Customer", Description="A customer of the bank, with personal bank accounts", IsExternal=true},
             new C4Item{ItemType=C4TypeEnum.EnterpriseBoundary, Text="Internet Banking",
                 Children=new ObservableCollection<C4Item>( new[]{
-                    new C4Item{ItemType=C4TypeEnum.Container, Text ="Web Application", Technology="Java, Spring MVC", Description="Delivers the static content and the Internet banking SPA" }
+                    new C4Item{ItemType=C4TypeEnum.System, Text ="Web Application", Technology="Java, Spring MVC", Description="Delivers the static content and the Internet banking SPA" }
                 })
             }
         })
@@ -329,188 +387,14 @@ namespace LocalEdit2.Pages
         C4Item? parentOfNode = null;
         C4Item? selectedNode = null;
         C4Item? parentNode = null;
-        //C4Item? potentialParentNode = null;
-//        C4Item? newItem = null;
 
-        //private Modal? modalRef;
-        //private Modal? NewItemModalRef { get; set; } = null;
-        //private Modal? C4ItemModalRef;
-
-
-        //private bool cancelClose;
-
-        //private bool modalVisible;
-        //private bool newItemModalVisible;
-
-        //private bool cancelled = false;
-
-//        private Task ShowModal()
-//        {
-////            modalVisible = true;
-
-//            InvokeAsync(() => StateHasChanged());
-
-//            return Task.CompletedTask;
-//        }
-
-        //        private Task ShowNewItemModal()
-        //private Task ShowNewItemModal(C4Item? parentNode)
-        //{
-        //    potentialParentNode = parentNode;
-            
-        //    //newItemModalVisible = true;
-
-        //    InvokeAsync(() => StateHasChanged());
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private Task HideModal()
-        //{
-        //    modalVisible = false;
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private Task CloseModal()
-        //{
-        //    // possibly add a check for changed and prompt to lose changes
-
-        //    cancelClose = false;
-        //    cancelled = true;
-
-        //    return modalRef.Hide();
-        //}
-
-        //C4TypeEnum? NewItemType { get; set; }
-
-        //private Task CloseNewItemModal()
-        //{
-        //    newItemType = null;
-
-        //    if(NewItemModalRef == null)
-        //        return Task.CompletedTask;
-
-        //    return NewItemModalRef.Close(CloseReason.EscapeClosing);
-        //}
-
-        //private Task CreateItem(C4TypeEnum itemType)
-        //{
-        //    newItemType = itemType;
-
-        //    newItem = new C4Item() { ItemType = itemType };
-        //    //            selectedNode = newItem;
-
-        //    if (NewItemModalRef == null)
-        //        return Task.CompletedTask;
-
-        //    return NewItemModalRef.Close(CloseReason.EscapeClosing);
-        //}
-
-        //private static bool ShouldShow(C4TypeEnum itemType, C4Item? parentNode)
-        //{
-        //    bool rtnVal = false;
-
-        //    if (parentNode == null)
-        //    {
-        //        switch (itemType)
-        //        {
-        //            case C4TypeEnum.Person:
-        //            case C4TypeEnum.System:
-        //            case C4TypeEnum.EnterpriseBoundary:
-        //                rtnVal = true;
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        switch (parentNode.ItemType)
-        //        {
-        //            case C4TypeEnum.Person:
-        //                // nothing is allowed
-        //                break;
-        //            case C4TypeEnum.System:
-        //                switch (itemType)
-        //                {
-        //                    case C4TypeEnum.Container:
-        //                    case C4TypeEnum.Database:
-        //                        rtnVal = true;
-        //                        break;
-        //                }
-        //                break;
-        //            case C4TypeEnum.EnterpriseBoundary:
-        //                switch (itemType)
-        //                {
-        //                    case C4TypeEnum.Person:
-        //                    case C4TypeEnum.System:
-        //                        rtnVal = true;
-        //                        break;
-        //                }
-        //                break;
-        //            case C4TypeEnum.Container:
-        //                switch (itemType)
-        //                {
-        //                    case C4TypeEnum.Component:
-        //                        rtnVal = true;
-        //                        break;
-        //                }
-        //                break;
-
-        //        }
-        //    }
-
-        //    return rtnVal;
-
-        //}
-
-        //private async Task TryCloseModal()
-        //{
-        //    // add a check for validity
-
-        //    cancelClose = true;
-
-        //    if (await propEditor.IsValid())
-        //    {
-        //        cancelClose = false;
-        //    }
-
-        //    await modalRef.Hide();
-        //}
-
-//        private Task OnModelOpened()
-//        {
-//            // reset, for the next attempt to close
-//            cancelClose = false;
-////            propEditor.ResetValidation();
-//            cancelled = false;
-
-//            return Task.CompletedTask;
-//        }
-
-        //private Task OnNewItemModalOpened()
-        //{
-        //    //// reset, for the next attempt to close
-        //    //cancelClose = false;
-        //    ////            propEditor.ResetValidation();
-        //    //cancelled = false;
-
-        //    return Task.CompletedTask;
-        //}
+        C4FlatItem? selectedFlatItem = null;
 
         string MarkdownText { get; set; } = string.Empty;
 
         Mermaid? MermaidOne { get; set; }
         Mermaid? MermaidTwo { get; set; }
         Mermaid? MermaidThree { get; set; }
-
-        //string diagramOneDefinition = "One";
-        //string diagramTwoDefinition = "Two";
-        //string diagramThreeDefinition = "Three";
-
-        //void OnClickNode(string nodeId)
-        //{
-        //    // TODO: do something with nodeId
-        //}
 
         public C4Item? SelectedNode { get => selectedNode; 
             set
@@ -521,33 +405,18 @@ namespace LocalEdit2.Pages
             }
         }
 
-        //private Task OnModalClosing(ModalClosingEventArgs e)
-        //{
-        //    // just set Cancel to prevent modal from closing
+        public C4FlatItem? SelectedFlatItem
+        {
+            get => selectedFlatItem;
+            set
+            {
+                selectedFlatItem = value;
+                //if (Document != null)
+                //    parentNode = FindParent(value, Document.Model);
+            }
+        }
 
-        //    if (e.CloseReason == CloseReason.EscapeClosing)
-        //    {
-        //        CloseModal();
-        //    }
-
-        //    if (cancelClose || e.CloseReason != CloseReason.UserClosing)
-        //    {
-        //        e.Cancel = true;
-        //    }
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private Task OnNewItemModalClosed()
-        //{
-        //    if(NewItemType != null)
-        //    {
-        //        ShowModal();
-        //    }
-        //    return Task.CompletedTask;
-        //}
-
-            private Task OnC4ItemModalClosed()
+        private Task OnC4ItemModalClosed()
         { 
             if(adding)
             {
@@ -574,6 +443,30 @@ namespace LocalEdit2.Pages
             c4Tree.Nodes = null;
 
             InvokeAsync(() => StateHasChanged());
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnC4FlatItemModalClosed()
+        {
+            if (adding)
+            {
+                // remove the new item, if add was cancelled
+                if (c4FlatItemModalRef?.Result == ModalResult.Cancel)
+                {
+                    if (SelectedFlatItem != null)
+                    {
+                        int itemIndex = Document.FlatModel.IndexOf(SelectedFlatItem);
+
+                        if(itemIndex != -1)
+                        {
+                            Document.FlatModel.RemoveAt(itemIndex);
+                        }
+                    }
+                    SelectedFlatItem = null;
+                }
+            }
+            adding = false;
 
             return Task.CompletedTask;
         }
@@ -668,24 +561,6 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-
-        //private Task OnNewItemModalClosing(ModalClosingEventArgs e)
-        //{
-        //    // just set Cancel to prevent modal from closing
-
-        //    //if (e.CloseReason == CloseReason.EscapeClosing)
-        //    //{
-        //    //    CloseModal();
-        //    //}
-
-        //    //if (cancelClose || e.CloseReason != CloseReason.UserClosing)
-        //    //{
-        //    //    e.Cancel = true;
-        //    //}
-
-        //    return Task.CompletedTask;
-        //}
-
         private Task DeleteItem()
         {
             if (SelectedNode != null)
@@ -711,41 +586,30 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-        //protected string TestVal { get; set; }
-
-        private async Task GenerateMarkdown()
+        private Task DeleteFlatItem()
         {
-            //MarkdownText = MarkdownGenerator.WrapMermaid(C4Publisher.Publish(Document));
+            if (SelectedFlatItem != null)
+            {
+                int itemIndex = Document.FlatModel.IndexOf(SelectedFlatItem);
 
-            //MarkdownText = MarkdownGenerator.WrapMermaid(C4Publisher.Publish(Document, "Context"));
-            //testVal = MarkdownText;
+                if (itemIndex != -1)
+                {
+                    Document.FlatModel.RemoveAt(itemIndex);
+                }
 
-            //MarkdownText = MarkdownGenerator.WrapMermaid("Context Diagram", C4PublisherLegacy.Publish(Document, "Context"),
-            //    "Container Diagram", C4PublisherLegacy.Publish(Document, "Container"),
-            //    "Component Diagram", C4PublisherLegacy.Publish(Document, "Component"));
+                SelectedFlatItem = null;
+            }
 
+            return Task.CompletedTask;
+        }
+
+    //protected string TestVal { get; set; }
+
+    private async Task GenerateMarkdown()
+        {
             MarkdownText = MarkdownGenerator.WrapMermaid("Context Diagram", C4Publisher.Publish(Document, "Context"),
                 "Container Diagram", C4Publisher.Publish(Document, "Container"),
                 "Component Diagram", C4Publisher.Publish(Document, "Component"));
-
-            //await mermaidOne.DisplayDiagram(C4Publisher.Publish(Document, "Context"));
-            //await mermaidTwo.DisplayDiagram(C4Publisher.Publish(Document, "Container"));
-            //await mermaidThree.DisplayDiagram(C4Publisher.Publish(Document, "Component"));
-
-            //await mermaidOne.DisplayDiagram(C4PublisherLegacy.Publish(Document, "Context"));
-            //await mermaidTwo.DisplayDiagram(C4PublisherLegacy.Publish(Document, "Container"));
-            //await mermaidThree.DisplayDiagram(C4PublisherLegacy.Publish(Document, "Component"));
-
-            //diagramOneDefinition = C4PublisherLegacy.Publish(Document, "Context");
-            //diagramTwoDefinition = C4PublisherLegacy.Publish(Document, "Container");
-            //diagramThreeDefinition = C4PublisherLegacy.Publish(Document, "Component");
-            //testVal = diagramOneDefinition;
-
-            //markdownRef.Value = MarkdownText;
-
-            //            markdownRef.Value = @"# Preview not available:  
-            //## The version of Mermaid used by this control is out of date";
-            //return Task.CompletedTask;
 
             await InvokeAsync(() => StateHasChanged());
 
@@ -753,8 +617,6 @@ namespace LocalEdit2.Pages
 
         private Task<string> GenerateHtml()
         {
-            //            string htmlText = HtmlGenerator.WrapMermaid(C4Publisher.Publish(Document));
-
             string htmlText = HtmlGenerator.WrapMermaid("Context Diagram", C4Publisher.Publish(Document, "Context"),
                 "Container Diagram", C4Publisher.Publish(Document, "Container"),
                 "Component Diagram", C4Publisher.Publish(Document, "Component"));
@@ -805,24 +667,32 @@ namespace LocalEdit2.Pages
 
             if (selectedTab == "preview")
             {
-                //await GenerateMarkdown();
-
-                //if(MermaidOne != null)
-                //    await MermaidOne.DisplayDiagram(C4Publisher.Publish(Document, "Context"));
-                //if (MermaidTwo != null)
-                //    await MermaidTwo.DisplayDiagram(C4Publisher.Publish(Document, "Container"));
-                //if (MermaidThree != null)
-                //    await MermaidThree.DisplayDiagram(C4Publisher.Publish(Document, "Component"));
-
                 diagramOneText = C4Publisher.Publish(Document, "Context");
                 diagramTwoText = C4Publisher.Publish(Document, "Container");
                 diagramThreeText = C4Publisher.Publish(Document, "Component");
-
-                //_ = InvokeAsync(() => StateHasChanged());
             }
 
             return;
         }
 
+        // https://stackoverflow.com/questions/66965107/blazor-how-to-conditionally-style-an-element
+        private string StyleForLevel(int n)
+        {
+            //if (n > 100) return "";
+            //if (n < 1) return "color:red";
+            //return "background:lightgreen";
+
+            int emValue = n * 2;
+
+            return $"padding-left:{emValue}em";
+        }
+
+        // https://v094.blazorise.com/docs/extensions/datagrid/
+        void OnSelectedRowStyling(C4FlatItem item, DataGridRowStyling styling)
+        {
+            //styling.Background = Background.Info;
+            styling.Background = Background.Default;
+            //styling.Color = Color.Default;
+        }
     }
 }
