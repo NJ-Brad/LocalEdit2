@@ -1,7 +1,7 @@
 ﻿using Blazorise;
 using LocalEdit2.PlanTypes;
 using Microsoft.AspNetCore.Components;
-using Octokit;
+//using Octokit;
 
 namespace LocalEdit2.Modals
 {

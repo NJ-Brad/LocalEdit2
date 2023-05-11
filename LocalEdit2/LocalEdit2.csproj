@@ -9,40 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="C4Types\C4PublisherLegacy.cs" />
     <Compile Remove="Modals\FlowItemModal.razor.cs" />
     <Compile Remove="Modals\FlowRelationshipModal.razor.cs" />
     <Compile Remove="Modals\GitManagementModal.razor.cs" />
-    <Compile Remove="Modals\MessageBox.razor.cs" />
-    <Compile Remove="Modals\PlanDependencyModal.razor.cs" />
-    <Compile Remove="Modals\PlanExportModal.razor.cs" />
-    <Compile Remove="Modals\PlanItemModal.razor.cs" />
     <Compile Remove="Modals\QuestionFlowItemModal.razor.cs" />
     <Compile Remove="Modals\QuestionFlowLinkLogicModal.razor.cs" />
     <Compile Remove="Modals\QuestionFlowRelationshipModal.razor.cs" />
     <Compile Remove="Modals\SequenceItemModal.razor.cs" />
     <Compile Remove="Modals\SequenceRelationshipModal.razor.cs" />
-    <Compile Remove="Modals\SprintModal.razor.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Modals\FlowItemModal.razor" />
     <Content Remove="Modals\FlowRelationshipModal.razor" />
     <Content Remove="Modals\GitManagementModal.razor" />
-    <Content Remove="Modals\MessageBox.razor" />
-    <Content Remove="Modals\PlanDependencyModal.razor" />
-    <Content Remove="Modals\PlanExportModal.razor" />
-    <Content Remove="Modals\PlanItemModal.razor" />
     <Content Remove="Modals\QuestionFlowItemModal.razor" />
     <Content Remove="Modals\QuestionFlowLinkLogicModal.razor" />
     <Content Remove="Modals\QuestionFlowRelationshipModal.razor" />
     <Content Remove="Modals\SequenceItemModal.razor" />
     <Content Remove="Modals\SequenceRelationshipModal.razor" />
-    <Content Remove="Modals\SprintModal.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BlazorDownloadFileFast" Version="0.2.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
     <PackageReference Include="Blazorise.Bootstrap5" Version="1.2.3" />
     <PackageReference Include="Blazorise.Components" Version="1.2.3" />
     <PackageReference Include="Blazorise.DataGrid" Version="1.2.3" />

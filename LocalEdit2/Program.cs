@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -20,6 +21,7 @@ builder.Services
     .AddFontAwesomeIcons();
 
 builder.Services.AddBlazorDownloadFile();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 //builder.Services.AddMermaidJS(options =>
 //{

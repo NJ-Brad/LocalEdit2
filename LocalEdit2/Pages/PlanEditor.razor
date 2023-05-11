@@ -1,0 +1,468 @@
+﻿@page "/PlanEditor"
+@using Blazorise.Components
+@using Blazorise.DataGrid
+@using LocalEdit2.C4Types
+@using Blazorise
+@using Blazorise.Extensions;
+@using LocalEdit2.PlanTypes
+
+<Div Style="padding: 10px;">
+
+    <h1>Plan Editor</h1>
+    <hr />
+
+    @*<Span>Plan Editor  </Span>*@
+
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@NewPlan">
+        <Icon Name="IconName.Star" />
+        New Plan
+    </Button>
+
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@LoadFile">
+        <Icon Name="IconName.FileUpload" />
+        Load
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@SaveFile">
+        <Icon Name="IconName.FileDownload" />
+        Save
+    </Button>
+
+@*    <Button Size="Size.Small" Color="Color.Primary" Clicked="@Export">
+        <Icon Name="IconName.ArrowRight" />
+        Export
+    </Button>
+*@
+@*    <Dropdown>
+        <DropdownToggle Size="Size.Small" Color="Color.Primary">
+            Export
+        </DropdownToggle>
+        <DropdownMenu>
+            <DropdownItem>Action</DropdownItem>
+            <DropdownDivider />
+            <DropdownItem>Another Action</DropdownItem>
+        </DropdownMenu>
+    </Dropdown>
+*@
+    &nbsp;<WIPManager @ref="wIPManagerRef" EditorName="PlanEditor" DataRequired="@OnWipDataRequired" DataReady="OnWipDataReady" Interval=30></WIPManager>
+    <br />
+@*    <Button Size="Size.Small" Color="Color.Primary" Clicked="@StartWIP">
+        <Icon Name="IconName.FileDownload" />
+        Start WIP
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@LoadWIP">
+        <Icon Name="IconName.FileDownload" />
+        Load WIP
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@SaveWIP">
+        <Icon Name="IconName.FileDownload" />
+        Save WIP
+    </Button>
+*@
+    @*@if (string.IsNullOrEmpty(MarkdownText))
+    {
+    <Button Size="Size.Small" Color="Color.Primary"  Disabled>
+    <Icon Name="IconName.ArrowRight" />
+    Export
+    </Button>
+    }
+    *@
+
+    <Span>Export  </Span>
+
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportGanttMarkdown">
+        <Icon Name="IconName.ArrowRight" />
+        Gantt (Markdown)
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportTimelineMarkdown">
+        <Icon Name="IconName.ArrowRight" />
+        Timeline (Markdown)
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportGanttHtml">
+        <Icon Name="IconName.ArrowRight" />
+        Gantt (HTML)
+    </Button>
+    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ExportTimelineHtml">
+        <Icon Name="IconName.ArrowRight" />
+        Timeline (HTML)
+    </Button>
+
+
+    @*</Div>*@
+
+    @*<ListView @ref="fiList" TItem="FlowItem"
+    Data="FlowItems"
+    TextField="(item) => item.Label"
+    ValueField="(item) => item.ID"
+    Mode="ListGroupMode.Selectable"
+    Color="Color.Default"
+    MaxHeight="300px"
+    SelectedItem="selectedItem"
+    >
+    </ListView>
+    *@
+
+
+    <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+        <Items>
+            <Tab Name="general">General</Tab>
+            <Tab Name="workitems">Work Items</Tab>
+            <Tab Name="sprints">Sprints</Tab>
+            <Tab Name="preview">Preview (Gantt)</Tab>
+            <Tab Name="preview2">Preview (Timeline)</Tab>
+        </Items>
+        <Content>
+            <TabPanel Name="general" Border="Border.Primary">
+                <Div Style="margin:20px">
+                    <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                        <Blazorise.ValidationSummary Label="The following errors were found..." />
+                        @*    <Field>
+                        <FieldLabel>Name with validation</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                        <Blazorise.TextEdit Placeholder="Enter name (validated)">
+                        <Feedback>
+                        <ValidationNone>Please enter the name.</ValidationNone>
+                        <ValidationSuccess>Name is good.</ValidationSuccess>
+                        <ValidationError>Enter valid name!</ValidationError>
+                        </Feedback>
+                        </Blazorise.TextEdit>
+                        </Validation>
+                        </Field>
+                        *@
+                        <Field>
+                            <FieldLabel>Title</FieldLabel>
+                            <Validation Validator="ValidationRule.IsNotEmpty">
+                                <TextEdit @bind-Text="Document.Title" Placeholder="Enter Title">
+                                    <Feedback>
+                                        <ValidationError>Title is required.</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </Validation>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Project Start Date</FieldLabel>
+                            <Validation Validator="ValidationRule.IsNotEmpty">
+                                <TextEdit @bind-Text="Document.StartDate" Placeholder="Enter Date">
+                                    <Feedback>
+                                        <ValidationError>Start Date is required.</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </Validation>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Base URL (For Stories)</FieldLabel>
+                            <Validation Validator="ValidationRule.IsNotEmpty">
+                                <TextEdit @bind-Text="Document.BaseUrl" Placeholder="Enter Base URL">
+                                    <Feedback>
+                                        <ValidationError>Base URL is required.</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </Validation>
+                        </Field>
+
+                        @*                <Field Horizontal>
+                        <FieldLabel ColumnSize="ColumnSize.Is3">Duration</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is5">
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                        <TextEdit @bind-Text="Item.Duration" Placeholder="Enter duration">
+                        <Feedback>
+                        <ValidationError>Please enter the duration.</ValidationError>
+                        </Feedback>
+                        </TextEdit>
+                        </Validation>
+                        </FieldBody>
+                        Days
+                        </Field>
+                        *@
+                    </Validations>
+                </Div>
+            </TabPanel>
+            <TabPanel Name="workitems" Border="Border.Primary">
+                <Div Style="margin:20px">
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
+                        <Icon Name="IconName.Add" />
+                        New
+                    </Button>
+
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowItemModal">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
+
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
+                    @if (!downAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.ArrowDown" />
+                        Move Down
+                    </Button>
+                    }
+                    @if (downAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemDown">
+                            <Icon Name="IconName.ArrowDown" />
+                            Move Down
+                        </Button>
+                    }
+
+                    @if (!upAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.ArrowUp" />
+                        Move Up
+                    </Button>
+                    }
+                    @if (upAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemUp">
+                            <Icon Name="IconName.ArrowUp" />
+                            Move Up
+                        </Button>
+                    }
+
+                    <DataGrid TItem="PlanItem"
+                              Data="@Document?.Items"
+                              @bind-SelectedRow="@SelectedItemRow"
+                              RowDoubleClicked="@ShowItemModal"
+                              ShowPager=false
+                              PageSize="50"
+                                FixedHeader FixedHeaderDataGridHeight="300px">
+                        <DataGridColumns>
+                            <DataGridColumn Field="@nameof( PlanItem.Label )" Editable="false">
+                                <DisplayTemplate>
+                                    @{
+                                        if (Document != null)
+                                        {
+                                            @($"{context?.Label} - {context?.Duration} (")
+                                            <Blazorise.Link To="@CalculateLink((Document != null) ? Document.BaseUrl : "", (context?.StoryId == null) ? "" : context.StoryId)" Target="Target.Blank">
+                                                @context?.StoryId
+                                            </Blazorise.Link>
+                                            @($")")
+                                        }
+                                    }
+                                </DisplayTemplate>
+
+                            </DataGridColumn>
+                        </DataGridColumns>
+                        <EmptyTemplate>
+                            <div class="box">
+                                No plan items were found!
+                            </div>
+                        </EmptyTemplate>
+                    </DataGrid>
+                </Div>
+            </TabPanel>
+
+            <TabPanel Name="sprints" Border="Border.Primary">
+                <Div Style="margin:20px">
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewSprint">
+                        <Icon Name="IconName.Add" />
+                        New
+                    </Button>
+
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowSprintModal">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
+
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteSprint">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
+                    @if (!sprintDownAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.ArrowDown" />
+                        Move Down
+                    </Button>
+                    }
+                    @if (sprintDownAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@SprintDown">
+                            <Icon Name="IconName.ArrowDown" />
+                            Move Down
+                        </Button>
+                    }
+
+                    @if (!sprintUpAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Disabled>
+                        <Icon Name="IconName.ArrowUp" />
+                        Move Up
+                    </Button>
+                    }
+                    @if (sprintUpAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@SprintUp">
+                            <Icon Name="IconName.ArrowUp" />
+                            Move Up
+                        </Button>
+                    }
+
+                    @if (useBuiltInEditor)
+                    {
+
+                        @*ShowPager=false*@
+                        @*FixedHeader FixedHeaderDataGridHeight="300px" Editable*@
+                        <DataGrid TItem="Sprint"
+                              Data="@Document?.Sprints"
+                              @bind-SelectedRow="@selectedSprintRow"
+                                    Editable
+                                    Responsive
+                                    ShowPager
+                              CommandMode="DataGridCommandMode.ButtonRow"
+                              EditMode="sprintEditMode">
+                        <DataGridColumns>
+                            <DataGridCommandColumn NewCommandAllowed="false" EditCommandAllowed="false" DeleteCommandAllowed="false">
+                                <SaveCommandTemplate>
+                                    <Button ElementId="btnSave" Type="ButtonType.Submit"
+                                                        PreventDefaultOnSubmit Color="Color.Primary" Clicked="@context.Clicked">
+                                        @context.LocalizationString
+                                        </Button>
+                                    </SaveCommandTemplate>
+                                    <CancelCommandTemplate>
+                                        <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@context.Clicked">@context.LocalizationString</Button>
+                                    </CancelCommandTemplate>
+                                    </DataGridCommandColumn>
+                                    <DataGridColumn Field="@nameof(Sprint.Label)" Caption="Sprint Name"
+                                                            Editable />
+                                <DataGridColumn Field="@nameof(Sprint.StartDate)" Caption="Start Date"
+                                                            Editable />
+                                <DataGridColumn Field="@nameof(Sprint.EndDate)" Caption="End Date" Editable />
+                            </DataGridColumns>
+
+                            <ButtonRowTemplate>
+                                <Button Color="Color.Success" Clicked="context.NewCommand.Clicked">New</Button>
+                                <Button Color="Color.Primary" Disabled="(selectedSprintRow is null)" Clicked="context.EditCommand.Clicked">Edit</Button>
+                                <Button Color="Color.Danger" Disabled="(selectedSprintRow is null)" Clicked="context.DeleteCommand.Clicked">Delete</Button>
+                                <Button Color="Color.Link" Clicked="context.ClearFilterCommand.Clicked">Clear Filter</Button>
+                            </ButtonRowTemplate>
+
+                            <EmptyTemplate>
+                                <div class="box">
+                                    No sprints were found!
+                                </div>
+                            </EmptyTemplate>
+                        </DataGrid>
+                    }
+
+                    @if (!useBuiltInEditor)
+                    {
+                        @*ShowPager=false*@
+                        @*FixedHeader FixedHeaderDataGridHeight="300px" Editable*@
+                        <DataGrid TItem="Sprint"
+                              Data="@Document?.Sprints"
+                              @bind-SelectedRow="@selectedSprintRow"
+                              RowDoubleClicked="@ShowSprintModal"
+                                    Responsive
+                              ShowPager=false
+                              PageSize="50"
+                                FixedHeader FixedHeaderDataGridHeight="300px">
+
+                        <DataGridColumns>
+                            <DataGridColumn Field="@nameof(Sprint.Label)" Caption="Sprint Name" />
+                            <DataGridDateColumn Field="@nameof(Sprint.StartDate)" Caption="Start Date" />
+                            <DataGridDateColumn Field="@nameof(Sprint.EndDate)" Caption="End Date" />
+                        </DataGridColumns>
+
+                        <EmptyTemplate>
+                            <div class="box">
+                                No sprints were found!
+                            </div>
+                        </EmptyTemplate>
+                    </DataGrid>
+                    }
+
+
+                </Div>
+            </TabPanel>
+
+            <TabPanel Name="preview" Border="Border.Primary">
+                <Mermaid GraphText="@graphOneText"></Mermaid>
+            </TabPanel>
+            <TabPanel Name="preview2" Border="Border.Primary">
+@*                <button @onclick="RefreshTimeline">
+                    Refresh
+                </button>
+                *@
+                <Mermaid GraphText="@graphTwoText"></Mermaid>
+@*                <SvgDisplay @ref="SvgDisplayOne" ChildContent="timelineSvg"></SvgDisplay>*@
+            </TabPanel>
+        </Content>
+    </Tabs>
+</Div>
+
+
+
+@*<button class="btn btn-primary" @onclick="GenerateMarkdown">Generate</button> *@
+@*
+<div>
+    <textarea @bind="MarkdownText" @bind:event="oninput" style="width:100%;"/>
+</div>
+*@
+
+
+
+@*<StardustDL.RazorComponents.Markdown.MarkdownRenderer
+    Value="@MarkdownText"
+    Class="your class"
+    Style="your styles"
+    RenderInterval="@TimeSpan.FromSeconds(10)"/>
+*@
+<LocalEdit2.Modals.PlanItemModal @ref="planItemModalRef" Items=@Document?.Items Closed="@OnPlanItemModalClosed" Item="@SelectedItemRow"></LocalEdit2.Modals.PlanItemModal>
+<LocalEdit2.Modals.SprintModal @ref="sprintModalRef" Closed="@OnSprintModalClosed" Item="@SelectedSprintRow"></LocalEdit2.Modals.SprintModal>
+
+<LocalEdit2.Modals.FileManagementModal @ref="fileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal>
+<LocalEdit2.Modals.MessageBox @ref="messageBoxRef" Closed="@OnMessageBoxClosed"></LocalEdit2.Modals.MessageBox>
+<LocalEdit2.Modals.PlanExportModal @ref="planExportModalRef" Closed="@OnPlanExportClosed"></LocalEdit2.Modals.PlanExportModal>
+
+<PageTitle>Plan Editor - @fileManagementModalRef?.Name</PageTitle>
+
+<HeadContent>
+    @*    <meta name="description" content="@description">*@
+    <meta name="description" content="An editor for plans">
+</HeadContent>
