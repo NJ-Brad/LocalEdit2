@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Blazorise;
+using System.Collections.ObjectModel;
 
 namespace LocalEdit2.C4Types
 {
@@ -10,17 +11,17 @@ namespace LocalEdit2.C4Types
             base.Clear();
             //base.ClearItems();
 
-            ProcessItems(tree, "", 0);
+            ProcessItemsFromTree(tree, "", 0);
 
             System.Console.WriteLine(Count);
         }
 
-        private void ProcessItems(ObservableCollection<C4Item> tree, string parentAlias, int level)
+        private void ProcessItemsFromTree(ObservableCollection<C4Item> tree, string parentAlias, int level)
         {
             foreach (var item in tree)
             {
                 Add(new C4FlatItem(item, parentAlias, level));
-                ProcessItems(item.Children, item.Alias, level + 1);
+                ProcessItemsFromTree(item.Children, item.Alias, level + 1);
             }
         }
 
@@ -28,7 +29,43 @@ namespace LocalEdit2.C4Types
         {
             ObservableCollection<C4Item> rtnVal = new ObservableCollection<C4Item>();
 
+            // option 1:
+            // One run through the list.
+            // The parent has been created (higher in the list) before the child is processed (beneath it in the list)
+            // Cannot handle out of order children
+
+            // option 2:
+            // this is recursive.
+            // Add all of the items without a parent.
+            // For each one, add their children.
+            // (Multiple runs through the list)
+            // (List is small - shouldn't be too big a performance hit
+            // Handles out of order items
+            ProcessItemsToTree(rtnVal, "");
+
             return rtnVal;
+        }
+
+        private void ProcessItemsToTree(ObservableCollection<C4Item> tree, string parentAlias)
+        {
+            foreach (var item in base.Items)
+            {
+                if (item.ParentAlias.Equals(parentAlias, StringComparison.OrdinalIgnoreCase))
+                {
+                    C4Item newItem = new C4Item 
+                    {
+                        ItemType = item.ItemType,
+                        Text = item.Text,
+                        IsDatabase = item.IsDatabase,
+                        IsExternal = item.IsExternal,
+                        Alias = item.Alias,
+                        Description = item.Description,
+                        Technology = item.Technology
+                    };
+                    tree.Add(newItem);
+                    ProcessItemsToTree(newItem.Children, newItem.Alias);
+                }
+            }
         }
 
         public C4FlatItem FindByAlias(string alias)

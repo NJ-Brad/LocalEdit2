@@ -19,7 +19,10 @@ namespace LocalEdit2.C4Types
         ObservableCollection<C4Item> model = new ObservableCollection<C4Item>();
         public ObservableCollection<C4Item> Model
         {
-            get { return model; }
+            get {
+                model = FlatModel.ConvertToTree();
+                return model; 
+            }
             set { 
                 model = value;
                 FlatModel.ConvertFromTree(model);

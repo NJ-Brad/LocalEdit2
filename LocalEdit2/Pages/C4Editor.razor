@@ -43,7 +43,7 @@
         <TabPanel Name="model" Border="Border.Primary">
             <Div Style="margin:20px; height:300px">
 
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
+@*                <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
                     <Icon Name="IconName.Add" />
                     New
                 </Button>
@@ -92,10 +92,6 @@
                         Delete
                     </Button>
                 }
-                @*
-                <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(parentNode)">Add</Button>
-                <Button Size="Size.Small" Color="Color.Secondary" Clicked="() => ShowNewItemModal(SelectedNode)">Add Child</Button>
-                *@
                 <TreeView Nodes="Document?.Model"
                           GetChildNodes="@(item => item?.Children)"
                           HasChildNodes="@(item => item?.Children?.Any() == true)"
@@ -105,10 +101,7 @@
                     <NodeContent>@context?.Text</NodeContent>
                 </TreeView>
 
-                @*FlatModel*@
-
-                @*                @bind-SelectedRow="@SelectedRelationshipRow"*@
-
+*@
                 <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewFlatItem">
                     <Icon Name="IconName.Add" />
                     New
@@ -159,7 +152,7 @@
                     </Button>
                 }
 
-                <br />
+@*                <br />
                 @if (SelectedFlatItem != null)
                 {
                     @SelectedFlatItem.Text
@@ -169,7 +162,7 @@
                     @("No Selection")
                 }
                 <br />
-
+*@
                 <DataGrid TItem="C4FlatItem"
                           Data="@Document?.FlatModel"
                           @bind-SelectedRow="@SelectedFlatItem"
