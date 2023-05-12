@@ -1,0 +1,17 @@
+Start here: https://www.mongodb.com/docs/atlas/getting-started/
+Register: https://account.mongodb.com/account/register?tck=docs_atlas
+I am using email address for my account.  There are notes in the above document listing differences when using other auth methods
+NJ_Brad@Outlook.com
+Mongo Login: https://cloud.mongodb.com/v2#/org/645e8a8995eb6f7080d44adb/projects
+Database info
+M0 plan
+AWS provider
+N. Virginia (us-east-1)
+Cluster name Cluster0
+
+First User ID njbrad - ZzLZh0KgcL1ruf5q
+
+If connecting from another device, it will need to be added to the cluster configuration
+
+Database LocalEdit_Data
+Collection Logging
