@@ -15,3 +15,5 @@ If connecting from another device, it will need to be added to the cluster confi
 
 Database LocalEdit_Data
 Collection Logging
+
+Mongo notes here: https://ankitsharmablogs.com/crud-using-blazor-with-mongodb/
