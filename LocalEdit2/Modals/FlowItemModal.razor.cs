@@ -15,9 +15,6 @@ namespace LocalEdit2.Modals
         public FlowRelationship? SelectedRelationshipRow { get; set; } = null;
         private FlowRelationshipModal? FlowRelationshipModalRef;
 
-        // setting to null allows the toolbar buttons to enable/disable properly
-        public LinkLogic? SelectedLinkLogicRow { get; set; } = null;
-
         bool adding = false;
 
         private Task ShowRelationshipModal()
@@ -46,7 +43,7 @@ namespace LocalEdit2.Modals
             };
 
             SelectedRelationshipRow = newRelationship;
-            Item?.NextQuestions?.Add(newRelationship);
+            Item?.NextItems?.Add(newRelationship);
             adding = true;
 
             return ShowRelationshipModal();
@@ -72,21 +69,8 @@ namespace LocalEdit2.Modals
         {
             if (SelectedRelationshipRow != null)
             {
-                Item?.NextQuestions?.Remove(SelectedRelationshipRow);
+                Item?.NextItems?.Remove(SelectedRelationshipRow);
                 SelectedRelationshipRow = null;
-            }
-
-            InvokeAsync(() => StateHasChanged());
-
-            return Task.CompletedTask;
-        }
-
-        private Task DeleteLinkLogic()
-        {
-            if (SelectedLinkLogicRow != null)
-            {
-                Item?.linkLogic?.Remove(SelectedLinkLogicRow);
-                SelectedLinkLogicRow = null;
             }
 
             InvokeAsync(() => StateHasChanged());
@@ -103,7 +87,7 @@ namespace LocalEdit2.Modals
                 {
                     if (SelectedRelationshipRow != null)
                     {
-                        Item?.NextQuestions?.Remove(SelectedRelationshipRow);
+                        Item?.NextItems?.Remove(SelectedRelationshipRow);
                         SelectedRelationshipRow = null;
                     }
                 }
@@ -112,7 +96,7 @@ namespace LocalEdit2.Modals
 
 //          if(SelectedRelationshipRow != null)
 //            {
-//                SelectedRelationshipRow.DecodedFlowId = DecodeQuestionFlowId(SelectedRelationshipRow.To);
+//                SelectedRelationshipRow.DecodedFlowId = DecodeFlowId(SelectedRelationshipRow.To);
 //            }
 
             InvokeAsync(() => StateHasChanged());

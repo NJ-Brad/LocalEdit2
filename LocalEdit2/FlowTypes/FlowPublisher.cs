@@ -6,14 +6,14 @@ namespace LocalEdit2.FlowTypes
 {
     public class FlowPublisher
     {
-        public static string Publish(FlowDocument QuestionFlow)
+        public static string Publish(FlowDocument Flow)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(MermaidHeader(QuestionFlow));
+            sb.Append(MermaidHeader(Flow));
 
-            // go through and get all of the questions created
-            foreach (var item in QuestionFlow.items)
+            // go through and get all of the items created
+            foreach (var item in Flow.items)
             {
                 //item = workspace.items[itmNum];
                 sb.Append(MermaidItem(item));
@@ -23,7 +23,7 @@ namespace LocalEdit2.FlowTypes
 
             // go through again and add all of the connections
             string prevItemId = "";
-            foreach (var item in QuestionFlow.items)
+            foreach (var item in Flow.items)
             {
                 if (createDefaultConnection && (prevItemId != ""))
                 {
@@ -38,14 +38,14 @@ namespace LocalEdit2.FlowTypes
                     prevItemId = "";
                 }
 
-                if ((item.NextQuestions == null) || (item.NextQuestions.Count == 0))
+                if ((item.NextItems == null) || (item.NextItems.Count == 0))
                 {
                     prevItemId = Utils.VOD(item.id);
                 }
 
-                if (item.NextQuestions != null)
+                if (item.NextItems != null)
                 {
-                    foreach (FlowRelationship rel in item.NextQuestions)
+                    foreach (FlowRelationship rel in item.NextItems)
                     {
                         sb.Append(MermaidConnection(rel));
                     }

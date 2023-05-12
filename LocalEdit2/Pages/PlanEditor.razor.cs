@@ -69,14 +69,14 @@ namespace LocalEdit2.Pages
                 BaseUrl = "https://gimme",
                 Items = new List<PlanItem>(new[]
             {
-                new PlanItem{ID = "Q1", Label="Question One", StoryId="1", Duration="1"},
-                //new PlanItem{ID = "Q2", Label="Question Two", StoryId="2", Duration="2", Dependencies = new List<PlanItemDependency>(new[]
+                new PlanItem{ID = "Q1", Label="Work Item One", StoryId="1", Duration="1"},
+                //new PlanItem{ID = "Q2", Label="Work Item Two", StoryId="2", Duration="2", Dependencies = new List<PlanItemDependency>(new[]
                 //{
                 //    new PlanItemDependency{ ID = "Q1", DependencyType="ITEM"}
                 //}) },
-                new PlanItem{ID = "Q2", Label="Question Two", StoryId="2", Duration="2"},
-                new PlanItem{ID = "Q3", Label="Question Three", StoryId="3", Duration="3"},
-                new PlanItem{ID = "Q4", Label="Question Four", StoryId="4", Duration="4"}
+                new PlanItem{ID = "Q2", Label="Work Item Two", StoryId="2", Duration="2"},
+                new PlanItem{ID = "Q3", Label="Work Item Three", StoryId="3", Duration="3"},
+                new PlanItem{ID = "Q4", Label="Work Item Four", StoryId="4", Duration="4"}
             }),
                 Sprints = new List<Sprint>(new[]
                 {

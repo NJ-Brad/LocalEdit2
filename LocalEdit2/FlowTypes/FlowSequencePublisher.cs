@@ -6,25 +6,25 @@ namespace LocalEdit2.FlowTypes
 {
     public class FlowSequencePublisher
     {
-        public static string Publish(FlowDocument QuestionFlow)
+        public static string Publish(FlowDocument Flow)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(MermaidHeader(QuestionFlow));
+            sb.Append(MermaidHeader(Flow));
 
-            // go through and get all of the questions created
-            foreach (var item in QuestionFlow.items)
+            // go through and get all of the items created
+            foreach (var item in Flow.items)
             {
                 //item = workspace.items[itmNum];
                 sb.Append(MermaidItem(item));
             }
 
             // go through again and add all of the connections
-            foreach (var item in QuestionFlow.items)
+            foreach (var item in Flow.items)
             {
-                if (item.NextQuestions != null)
+                if (item.NextItems != null)
                 {
-                    foreach (var rel in item.NextQuestions)
+                    foreach (var rel in item.NextItems)
                     {
                         rel.From = Utils.VOD(item.title);
                         sb.Append(MermaidConnection(rel));
@@ -35,7 +35,7 @@ namespace LocalEdit2.FlowTypes
             return sb.ToString();
         }
 
-        private static string MermaidHeader(FlowDocument QuestionFlow)
+        private static string MermaidHeader(FlowDocument Flow)
         {
             StringBuilder sb = new StringBuilder();
             //sb.AppendLine("graph TD");

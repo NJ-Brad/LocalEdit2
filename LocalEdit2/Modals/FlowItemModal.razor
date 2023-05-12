@@ -103,7 +103,7 @@ Relations
                 </Span>
 
                 <DataGrid TItem="FlowRelationship"
-                          Data="@Item?.NextQuestions"
+                          Data="@Item?.NextItems"
                           @bind-SelectedRow="@SelectedRelationshipRow"
                               RowDoubleClicked="@ShowRelationshipModal"
                             Responsive>
@@ -120,7 +120,7 @@ Relations
 
                                             @($"{DecodeFlowId(rel.Label)}") <NBSP /> <Icon Name="IconName.ArrowRight" /> <NBSP /> @($"{DecodeFlowId(rel.To)}")
 
-                                        //@($"{DecodeQuestionFlowId(rel.To)}")
+                                        //@($"{DecodeFlowId(rel.To)}")
                                     }
                                 }
                             </DisplayTemplate>

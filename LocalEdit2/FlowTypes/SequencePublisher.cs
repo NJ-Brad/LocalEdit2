@@ -20,7 +20,7 @@ namespace LocalEdit2.FlowTypes
 
             foreach (var item in Sequence.items)
             {
-                foreach (var rel in item.NextQuestions)
+                foreach (var rel in item.NextItems)
                 {
                     sb.Append(MermaidConnection(rel, Sequence.items));
                 }

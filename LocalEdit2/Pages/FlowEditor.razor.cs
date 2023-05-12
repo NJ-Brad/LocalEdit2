@@ -16,31 +16,6 @@ namespace LocalEdit2.Pages
 {
     public partial class FlowEditor : ComponentBase
     {
-        // Add
-        // Click Add
-        // Create new record
-        // set modalObject to new record
-        // Open editor
-        // When editor closes
-        // If cancelled - exit
-        // else add record to tree and model
-
-        // Update
-        // click edit
-        // create new record
-        // copy selected record to new record
-        // set modalObject to new record
-        // open editor
-        // When editor closes
-        // If cancelled - exit
-        // else update model and tree
-
-        //void Edit()
-        //{
-
-        //}
-
-        //Mermaid? MermaidOne { get; set; }
         public string diagramOneText { get; set; } = string.Empty;
         public string diagramTwoText { get; set; } = string.Empty;
 
@@ -53,21 +28,12 @@ namespace LocalEdit2.Pages
                 items = new List<FlowItem>(new[]
             {
 //            C4TestData.InternalPerson,
-            new FlowItem{id = "Q1", title="Question One"},
-            new FlowItem{id = "Q2", title="Question Two"},
-            new FlowItem{id = "Q3", title="Question Three"},
-            new FlowItem{id = "Q4", title="Question Four"}
+            new FlowItem{id = "Q1", title="Screen One"},
+            new FlowItem{id = "Q2", title="Screen Two"},
+            new FlowItem{id = "Q3", title="Screen Three"},
+            new FlowItem{id = "Q4", title="Screen Four"}
         })
             };
-
-            //    this.Document.Relationships = new List<FlowRelationship>(new[]
-            //    {
-            //    new FlowRelationship{ From="Question One", To ="Question Two", title= "Step One"},
-            //    new FlowRelationship{ From="Question One", To ="Question Three", title="Alt QuestionFlow"},
-            //    new FlowRelationship{ From="Question Three", To ="Question Four", title="Step One"},
-            //    new FlowRelationship{ From="Question Two", To ="Question Four", title="Weird QuestionFlow"},
-            //    new FlowRelationship{ From="Question Four", To ="Question One", title="Vicious Cycle"}
-            //});
 
             return base.OnInitializedAsync();
         }
@@ -159,29 +125,6 @@ namespace LocalEdit2.Pages
         private async Task UpdatePreview()
         {
             diagramOneText = FlowPublisher.Publish(Document);
-
-            //if ((Document != null) && (MermaidOne != null))
-            //{
-            //    // convert to "normal" flow
-            //    FlowDocument fd = LocalEdit2.FlowTypes.LpeConverter.ToFlowDocument(Document);
-
-            //    await MermaidOne.DisplayDiagram(FlowPublisher.Publish(Document));
-            //}
-
-    //        diagramOneText = @"graph TD
-    //Q1[""Question One""]
-    //Q2[""Question Two""]
-    //Q3[""Question Three""]
-    //Q4[""Question Four""]
-    //Q1--""New Relationship""-->Q2
-    //";
-
-    //        diagramOneText = @"graph TD
-    //Q1[""Question One""]
-    //Q2[""Question Two""]
-    //Q3[""Question Three""]
-    //Q4[""Question Four""]";
-
         }
 
         private async Task UpdatePreview2()
@@ -189,59 +132,28 @@ namespace LocalEdit2.Pages
             diagramTwoText = SequencePublisher.Publish(Document);
         }
 
-            private Task NewQuestionFlow()
+            private Task NewFlow()
         {
             if (FileManagementModalRef != null)
-                FileManagementModalRef.Name = "New_QuestionFlow.json";
+                FileManagementModalRef.Name = "New_Flow.json";
 
             Document = new()
             {
                 items = new List<FlowItem>(new[]
             {
     //            C4TestData.InternalPerson,
-            new FlowItem{id = "Q1", title="Question One"},
-            new FlowItem{id = "Q2", title="Question Two"},
-            new FlowItem{id = "Q3", title="Question Three"},
-            new FlowItem{id = "Q4", title="Question Four"}
+            new FlowItem{id = "Q1", title="Screen One"},
+            new FlowItem{id = "Q2", title="Screen Two"},
+            new FlowItem{id = "Q3", title="Screen Three"},
+            new FlowItem{id = "Q4", title="Screen Four"}
         })
             };
-
-            //this.Document.Relationships = new List<FlowRelationship>(new[]
-            //{
-            //new FlowRelationship{ From="Question One", To ="Question Two", title= "Step One"},
-            //new FlowRelationship{ From="Question One", To ="Question Three", title="Alt QuestionFlow"},
-            //new FlowRelationship{ From="Question Three", To ="Question Four", title="Step One"},
-            //new FlowRelationship{ From="Question Two", To ="Question Four", title="Weird QuestionFlow"},
-            //new FlowRelationship{ From="Question Four", To ="Question One", title="Vicious Cycle"}
-            //});
-
-            //ResetValidation();
 
             return Task.CompletedTask;
         }
 
-        //        List<FlowItem> FlowItems = new List<FlowItem>(new[]
-        //        {
-        ////            C4TestData.InternalPerson,
-        //            new FlowItem{ID = "Q1", ItemType=FlowItemType.Question, title="Question One"},
-        //            new FlowItem{ID = "Q2", ItemType=FlowItemType.Question, title="Question Two"},
-        //            new FlowItem{ID = "Q3", ItemType=FlowItemType.Question, title="Question Three"},
-        //            new FlowItem{ID = "Q4", ItemType=FlowItemType.Question, title="Question Four"}
-        //        });
-
-        //        List<FlowRelationship> FlowRelationships = new List<FlowRelationship>(new[]
-        //        {
-        //            new FlowRelationship{ From="Q1", To ="Q2", title= "Step One"},
-        //            new FlowRelationship{ From="Q1", To ="Q3", title="Alt QuestionFlow"},
-        //            new FlowRelationship{ From="Q3", To ="Q4", title="Step One"},
-        //            new FlowRelationship{ From="Q2", To ="Q4", title="Weird QuestionFlow"},
-        //            new FlowRelationship{ From="Q4", To ="Q1", title="Vicious Cycle"}
-        //        });
-
         private FlowItemModal? FlowItemModalRef;
         private FlowItem? selectedItemRow = null;
-
-        //private FlowRelationshipModal? FlowRelationshipModalRef;
 
         private Task ShowItemModal()
         {
@@ -263,7 +175,7 @@ namespace LocalEdit2.Pages
             FlowItem newItem = new()
             {
                 //newItem.ID = Guid.NewGuid().ToString().Replace('-', '_').ToUpper();
-                title = "New Question"
+                title = "New Screen"
             };
 
             SelectedItemRow = newItem;
@@ -347,91 +259,11 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-
-        //private Task ShowRelationshipModal()
-        //{
-        //    //if (selectedRelationshipRow == null)
-        //    //{
-        //    //    return Task.CompletedTask;
-        //    //}
-        //    //FlowRelationshipModalRef.item = selectedRelationshipRow;
-
-        //    //FlowRelationshipModalRef?.ShowModal();
-
-        //    ////InvokeAsync(() => StateHasChanged());
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private Task AddNewRelationship()
-        //{
-        //    //FlowRelationship newRelationship = new FlowRelationship();
-        //    //newRelationship.title = "New Relationship";
-
-        //    //selectedRelationshipRow = newRelationship;
-        //    //Document.Relationships.Add(newRelationship);
-        //    //adding = true;
-
-        //    return ShowRelationshipModal();
-        //}
-
-        //private string DecodeQuestionFlowId(string id)
-        //{
-        //    string rtnVal = id;
-
-        //    foreach (FlowItem fi in Document.Items)
-        //    {
-        //        if(fi.ID == id)
-        //        {
-        //            rtnVal = fi.title;
-        //            break;
-        //        }
-        //    }
-
-        //    return rtnVal;
-        //}
-
-        //private Task DeleteRelationship()
-        //{
-        //    //if (selectedRelationshipRow != null)
-        //    //{
-        //    //    Document.Relationships.Remove(selectedRelationshipRow);
-        //    //    selectedRelationshipRow = null;
-        //    //}
-
-        //    //InvokeAsync(() => StateHasChanged());
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private Task OnFlowRelationshipModalClosed()
-        //{
-        //    //if (adding)
-        //    //{
-        //    //    // remove the new item, if add was cancelled
-        //    //    if (FlowRelationshipModalRef.Result == ModalResult.Cancel)
-        //    //    {
-        //    //        Document.Relationships.Remove(selectedRelationshipRow);
-        //    //        selectedRelationshipRow = null;
-        //    //    }
-        //    //}
-        //    //adding = false;
-
-        //    //InvokeAsync(() => StateHasChanged());
-
-        //    return Task.CompletedTask;
-        //}
-
         FileManagementModal? FileManagementModalRef { get; set; }
         GitManagementModal? GitManagementModalRef { get; set; }
 
-
-        //bool isLpeFile = false;
-
         private Task LoadFile()
         {
-            //isLpeFile = false;
-
             FileManagementModalRef?.LoadFile();
 
             return Task.CompletedTask;
@@ -445,42 +277,24 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-        private Task LoadLpeFile()
-        {
-            //isLpeFile = true;
-
-            FileManagementModalRef?.LoadFile();
-
-            return Task.CompletedTask;
-        }
-
 
         private Task SaveFile()
         {
             string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
-            //if (selectedItemRow == null)
-            //{
-            //    return Task.CompletedTask;
-            //}
-            //FlowItemModalRef.item = selectedItemRow;
 
             FileManagementModalRef?.SaveFile(fileText);
-            //fileManagementModalRef?.ShowModal();
-
-            //InvokeAsync(() => StateHasChanged());
 
             return Task.CompletedTask;
         }
 
         private Task ExportFile()
         {
-            //          if (Validate().Result)
             {
                 GenerateMarkdown();
 
                 if (FileManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "QuestionFlow.md";
+                    FileManagementModalRef.Name = "Flow.md";
                     FileManagementModalRef.SaveFile(MarkdownText);
                 }
             }
@@ -496,20 +310,12 @@ namespace LocalEdit2.Pages
 
                 if (FileManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "QuestionFlow.html";
+                    FileManagementModalRef.Name = "Flow.html";
                     FileManagementModalRef.SaveFile(htmlText);
                 }
             }
             return Task.CompletedTask;
         }
-
-
-        //        MarkdownRenderer markdownRef = null;
-
-        //void OnClickNode(string nodeId)
-        //{
-        //    // TODO: do something with nodeId
-        //}
 
         private Task OnFileManagementModalClosed()
         {
@@ -521,15 +327,6 @@ namespace LocalEdit2.Pages
                     Document = JsonSerializer.Deserialize(FileManagementModalRef.FileText, typeof(FlowDocument)) as FlowDocument;
                 InvokeAsync(() => StateHasChanged());
             }
-            //if (adding)
-            //{
-            //    // remove the new item, if add was cancelled
-            //    if (FlowRelationshipModalRef.Result == ModalResult.Cancel)
-            //    {
-            //        FlowRelationships.Remove(selectedRelationshipRow);
-            //    }
-            //}
-            //adding = false;
 
             return Task.CompletedTask;
         }
@@ -538,9 +335,6 @@ namespace LocalEdit2.Pages
         {
             if (GitManagementModalRef?.Result == ModalResult.OK)
             {
-                //    if (string.IsNullOrEmpty(FileManagementModalRef.FileText))
-                //        Document = null;
-                //    else
                 try
                 {
                     var gitHubClient = new GitHubClient(new ProductHeaderValue("LocalEdit"));
@@ -582,10 +376,8 @@ namespace LocalEdit2.Pages
         }
 
 
-        //        private string GenerateMermaidText(QuestionFlowDocument document)
         private Task GenerateMarkdown()
         {
-            //mermaidText = QuestionFlowPublisher.Publish(Document);
             if (Document != null)
                 MarkdownText = MarkdownGenerator.WrapMermaid(FlowPublisher.Publish(Document));
 

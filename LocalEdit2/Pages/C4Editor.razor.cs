@@ -126,28 +126,8 @@ namespace LocalEdit2.Pages
 
         bool adding;
 
-        // Is this a case where I need to wait to create the new item?
-        // For consistency, i should create the item, then remove it on close, if I hit cancel
-        // I could create the item, once I know the type...  Bleep.  I know that I am creating an item.
-        // I just dow't know the node type
-        // If the user cancels on the node type selection, call the cancel method
-        // This will allow the main editor to only need to call the single modal
-
         private Task AddNewItem()
         {
-            //C4Item testItem = new();
-            //testItem.Text = "New Question";
-            //Document.Model.Add(testItem);
-
-            //C4Workspace? holdMe = Document;
-            //Document = holdMe;
-
-            //InvokeAsync(() => StateHasChanged());
-
-
-            //return Task.CompletedTask;
-
-
             if (Document == null)
                 return Task.CompletedTask;
 
@@ -155,9 +135,6 @@ namespace LocalEdit2.Pages
             parentOfNode = FindParent(selectedNodeAtTimeOfClick, Document.Model);
 
             C4Item newItem = new ();
-            //newItem.ItemType = FlowItemType.Question;
-            //newItem.ID = Guid.NewGuid().ToString().Replace('-', '_').ToUpper();
-            //newItem.Label = "New Question";
 
             if (parentOfNode == null)
             {
@@ -173,7 +150,6 @@ namespace LocalEdit2.Pages
             InvokeAsync(() => StateHasChanged());
 
             return ShowItemModal();
-            //return Task.CompletedTask;
         }
 
         private Task AddNewFlatItem()
@@ -214,9 +190,6 @@ namespace LocalEdit2.Pages
             parentOfNode = SelectedNode;
 
             C4Item newItem = new ();
-            //newItem.ItemType = FlowItemType.Question;
-            //newItem.ID = Guid.NewGuid().ToString().Replace('-', '_').ToUpper();
-            //newItem.Label = "New Question";
 
             parentNode = SelectedNode;
 
