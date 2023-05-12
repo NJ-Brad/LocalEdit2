@@ -39,7 +39,7 @@ namespace LocalEdit2.Pages
 
         //}
 
-//        MarkdownRenderer markdownRef = null;
+        //        MarkdownRenderer markdownRef = null;
         //Mermaid mermaidOne;
 
         //void OnClickNode(string nodeId)
@@ -48,9 +48,9 @@ namespace LocalEdit2.Pages
         //}
 
         //Mermaid? MermaidOne { get; set; }
-        string graphOneText { get; set; }
+        string graphOneText { get; set; } = "";
         //Mermaid? MermaidTwo { get; set; }
-        string graphTwoText { get; set; }
+        string graphTwoText { get; set; } = "";
         //SvgDisplay? SvgDisplayOne { get; set; }
 
         private WIPManager? wIPManagerRef;
@@ -94,7 +94,7 @@ namespace LocalEdit2.Pages
         {
             if (firstRender)
             {
-                if (await wIPManagerRef.DataExists())
+                if ((wIPManagerRef != null) && (messageBoxRef != null) && (await wIPManagerRef.DataExists()))
                 {
                     //messageBoxRef.ShowModal();
                     // last button will be "primary"
@@ -103,7 +103,8 @@ namespace LocalEdit2.Pages
                 }
                 else
                 {
-                    wIPManagerRef.Start();
+                    if(wIPManagerRef != null)
+                        wIPManagerRef.Start();
                 }
             }
             base.OnAfterRender(firstRender);
@@ -128,7 +129,7 @@ namespace LocalEdit2.Pages
 
                     if (numItems > 1)
                     {
-                        int rowPosition = GetPosition(selectedItemRow.ID);
+                        int rowPosition = GetPosition(selectedItemRow.ID ?? "");
                         if (rowPosition != -1)  // there is a selection
                         {
                             if (rowPosition > 0)
@@ -163,7 +164,7 @@ namespace LocalEdit2.Pages
 
                     if (numItems > 1)
                     {
-                        int rowPosition = GetSprintPosition(selectedSprintRow.ID);
+                        int rowPosition = GetSprintPosition(selectedSprintRow.ID ?? "");
                         if (rowPosition != -1)  // there is a selection
                         {
                             if (rowPosition > 0)
@@ -216,7 +217,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedItemRow != null)
             {
-                int position = GetPosition(SelectedItemRow.ID);
+                int position = GetPosition(SelectedItemRow.ID ?? "");
 
                 if (position != -1)
                 {
@@ -236,7 +237,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedSprintRow != null)
             {
-                int position = GetSprintPosition(SelectedSprintRow.ID);
+                int position = GetSprintPosition(SelectedSprintRow.ID ?? "");
 
                 if (position != -1)
                 {
@@ -257,7 +258,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedItemRow != null)
             {
-                int position = GetPosition(SelectedItemRow.ID);
+                int position = GetPosition(SelectedItemRow.ID ?? "");
 
                 if (position != -1)
                 {
@@ -277,7 +278,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedSprintRow != null)
             {
-                int position = GetSprintPosition(SelectedSprintRow.ID);
+                int position = GetSprintPosition(SelectedSprintRow.ID ?? "");
 
                 if (position != -1)
                 {
@@ -300,7 +301,7 @@ namespace LocalEdit2.Pages
         bool sprintDownAllowed { get; set; } = false;
 
 
-        PlanDocument Document { get; set; } = new();
+        PlanDocument? Document { get; set; } = null;
 
         string MarkdownText { get; set; } = string.Empty;
 
@@ -316,57 +317,21 @@ namespace LocalEdit2.Pages
         //        int tabSwitchesToIgnore = 0;
         MarkupString timelineSvg { get; set; }
 
-        private async Task OnSelectedTabChanged(string name)
+        private Task OnSelectedTabChanged(string name)
         {
             selectedTab = name;
 
             if (selectedTab == "preview")
             {
-                graphOneText = PlanPublisher.Publish(Document);
-                //if ((MermaidOne != null) && (Document != null))
-                //{
-                //    await MermaidOne.DisplayDiagram(PlanPublisher.Publish(Document));
-                //}
+                graphOneText = Document == null ? "" :  PlanPublisher.Publish(Document);
             }
 
             if (selectedTab == "preview2")
             {
-                graphTwoText = TimelinePublisher.Publish(Document);
-                //if ((MermaidTwo != null) && (Document != null))
-                //{
-                //    // this wonky work around takes care of an issue where it takes THREE TRIES to get the diagram to update
-                //    int tries = 0;
-                //    bool worked = false;
-
-                //    while (!worked && (tries < 4))
-                //    {
-                //        try
-                //        {
-                //            //string input = TimelinePublisher.Publish(Document);
-                //            //await MermaidTwo.DisplayDiagram(input);
-
-                //            await MermaidTwo.DisplayDiagram(TimelinePublisher.Publish(Document));
-
-                //            ////SvgDisplayOne.ChildContent = new MarkupString(MermaidTwo.SvgText);
-                //            ////timelineSvg = AddContent(MermaidTwo.SvgText);
-                //            //timelineSvg = new MarkupString(MermaidTwo.SvgText);
-
-                //            //timelineSvg = new MarkupString(MermaidTwo.GenerateSvg(TimelinePublisher.Publish(Document)));
-                //            //timelineSvg = new MarkupString(MermaidTwo.SvgText);
-                //            worked = true;
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            System.Console.WriteLine(ex.ToString());
-                //            tries++;
-                //        }
-                //        // <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
-                //        // https://stackoverflow.com/questions/60785749/using-svgs-in-blazor-page#60787289
-                //    }
-                //}
+                graphTwoText = Document == null ? "" : TimelinePublisher.Publish(Document);
             }
 
-            //return Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         private RenderFragment AddContent(string textContent) => builder =>
@@ -375,14 +340,11 @@ namespace LocalEdit2.Pages
         };
 
 
-        private async Task RefreshTimeline()
+        private Task RefreshTimeline()
         {
-            graphTwoText = TimelinePublisher.Publish(Document);
-            //if ((MermaidTwo != null) && (Document != null))
-            //{
-            //    string input = TimelinePublisher.Publish(Document);
-            //    MermaidTwo.DisplayDiagram(input);
-            //}
+            graphTwoText = Document == null ? "" : TimelinePublisher.Publish(Document);
+
+            return Task.CompletedTask;
         }
 
         private Task ShowItemModal()
@@ -558,7 +520,7 @@ namespace LocalEdit2.Pages
 
         private async Task NewPlan()
         {
-            if ((await IsDocumentDirty()) && (await wIPManagerRef.DataExists()))
+            if ((IsDocumentDirty()) && (wIPManagerRef != null) && (messageBoxRef != null) && (await wIPManagerRef.DataExists()))
                 {
                     //messageBoxRef.ShowModal();
                     // last button will be "primary"
@@ -586,14 +548,19 @@ namespace LocalEdit2.Pages
             //            return Task.CompletedTask;
         }
 
-        private async Task Export()
+        private Task Export()
         {
+            if(planExportModalRef == null)
+                throw new ArgumentNullException(nameof(planExportModalRef));
+
             planExportModalRef.ShowModal();
+
+            return Task.CompletedTask;
         }
 
         private async Task LoadFile()
         {
-            if ((await IsDocumentDirty()) && (await wIPManagerRef.DataExists()))
+            if ((IsDocumentDirty() && (wIPManagerRef != null) && (messageBoxRef != null) && (await wIPManagerRef.DataExists())))
             {
                 //messageBoxRef.ShowModal();
                 // last button will be "primary"
@@ -604,12 +571,10 @@ namespace LocalEdit2.Pages
             { 
                 ImplementLoadPlan();
             }
-            //fileManagementModalRef?.LoadFile();
-
 //            return Task.CompletedTask;
         }
 
-        private async Task<bool>IsDocumentDirty()
+        private bool IsDocumentDirty()
         {
             string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
 
@@ -618,23 +583,32 @@ namespace LocalEdit2.Pages
 
         private Task StartWIP()
         {
+            if(wIPManagerRef == null)
+                throw new ArgumentNullException(nameof(wIPManagerRef));
+
             wIPManagerRef.Start();
             return Task.CompletedTask;
         }
 
-        private Task LoadWIP()
+        private async Task LoadWIP()
         {
-            wIPManagerRef.Load();
+            if (wIPManagerRef == null)
+                throw new ArgumentNullException(nameof(wIPManagerRef));
+
+            await wIPManagerRef.Load();
             // we don't know if it has been saved
             lastSavedDocumentText = "";
-            return Task.CompletedTask;
+//            return Task.CompletedTask;
         }
 
         private Task SaveWIP()
         {
-            string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
-            wIPManagerRef.Data = fileText;
-            //            wIPManagerRef.Load();
+            if (wIPManagerRef != null)
+            {
+                string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
+                wIPManagerRef.Data = fileText;
+            }
+
             return Task.CompletedTask;
         }
 
@@ -729,8 +703,10 @@ namespace LocalEdit2.Pages
             //    }
             //    InvokeAsync(() => StateHasChanged());
             //}
-
-            wIPManagerRef.Data = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
+            if (wIPManagerRef != null)
+            {
+                wIPManagerRef.Data = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
+            }
 
             return Task.CompletedTask;
         }
@@ -738,18 +714,11 @@ namespace LocalEdit2.Pages
 
         private Task OnWipDataReady()
         {
-            //if (fileManagementModalRef?.Result == ModalResult.OK)
-            //{
-            //    //MarkdownText = fileManagementModalRef.FileText;
-            //    if (fileManagementModalRef.FileText != null)
-            //    {
-            //        Document = (JsonSerializer.Deserialize(fileManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
-            //    }
-            //    InvokeAsync(() => StateHasChanged());
-            //}
-
-            Document = (JsonSerializer.Deserialize(wIPManagerRef.Data, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
-            InvokeAsync(() => StateHasChanged());
+            if (wIPManagerRef != null)
+            {
+                Document = (JsonSerializer.Deserialize(wIPManagerRef.Data, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
+                InvokeAsync(() => StateHasChanged());
+            }
 
             return Task.CompletedTask;
         }
@@ -771,6 +740,9 @@ namespace LocalEdit2.Pages
 
         private Task OnPlanExportClosed()
         {
+            if(planExportModalRef == null)
+                throw new ArgumentNullException(nameof(planExportModalRef));
+
             switch(planExportModalRef.DiagramType)
             {
                 case "gantt":
@@ -819,7 +791,7 @@ namespace LocalEdit2.Pages
 
         }
 
-        private Task OnMessageBoxClosed()
+        private async Task OnMessageBoxClosed()
         {
             switch(messageBoxRef?.MessageBoxID)
             {
@@ -827,12 +799,13 @@ namespace LocalEdit2.Pages
                     switch (messageBoxRef?.Result)
                     {
                         case ModalResult.ButtonTwo:
-                            wIPManagerRef.Load();
-                            //lastSavedDocumentText = wIPManagerRef.Data;
+                            if (wIPManagerRef != null)
+                                await wIPManagerRef.Load();
                             lastSavedDocumentText = "";
                             break;
                     }
-                    wIPManagerRef.Start();
+                    if(wIPManagerRef != null)
+                        wIPManagerRef.Start();
                     break;
                 case "LOAD_PLAN":
                     switch (messageBoxRef?.Result)
@@ -841,8 +814,8 @@ namespace LocalEdit2.Pages
                             ImplementLoadPlan();
                             break;
                         case ModalResult.ButtonTwo:
-                            wIPManagerRef.Load();
-                            //lastSavedDocumentText = wIPManagerRef.Data;
+                            if (wIPManagerRef != null)
+                                await wIPManagerRef.Load();
                             lastSavedDocumentText = "";
                             break;
                     }
@@ -854,7 +827,8 @@ namespace LocalEdit2.Pages
                             ImplementNewPlan();
                             break;
                         case ModalResult.ButtonTwo:
-                            wIPManagerRef.Load();
+                            if (wIPManagerRef != null)
+                                await wIPManagerRef.Load();
                             //lastSavedDocumentText = wIPManagerRef.Data;
                             lastSavedDocumentText = "";
                             break;
@@ -862,41 +836,18 @@ namespace LocalEdit2.Pages
                     break;
 
         }
-            //// "RESUME_WIP"
-            //switch (messageBoxRef?.Result)
-            //{
-            //    case ModalResult.ButtonOne:
-            //        break;
-            //    case ModalResult.ButtonTwo:
-            //        break;
-            //    case ModalResult.ButtonThree:
-            //        break;
-            //    case ModalResult.ButtonFour:
-            //        break;
-            //    case ModalResult.ButtonFive:
-            //        break;
-            //    default:
-            //        break;
-            //}
-
 
             if (messageBoxRef?.Result == ModalResult.OK)
             {
-                ////MarkdownText = fileManagementModalRef.FileText;
-                //if (fileManagementModalRef.FileText != null)
-                //{
-                //    Document = (JsonSerializer.Deserialize(fileManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
-                //}
-                //InvokeAsync(() => StateHasChanged());
             }
 
-            return Task.CompletedTask;
+//            return Task.CompletedTask;
         }
 
         private void ImplementLoadPlan()
         {
             fileManagementModalRef?.LoadFile();
-            lastSavedDocumentText = wIPManagerRef.Data;
+            lastSavedDocumentText = wIPManagerRef == null ? "" : wIPManagerRef.Data;
         }
 
         void ImplementNewPlan()

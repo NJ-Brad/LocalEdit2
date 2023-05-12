@@ -68,9 +68,9 @@ namespace LocalEdit2.C4Types
             }
         }
 
-        public C4FlatItem FindByAlias(string alias)
+        public C4FlatItem? FindByAlias(string alias)
         {
-            C4FlatItem rtnVal = null;
+            C4FlatItem? rtnVal = null;
 
             foreach (var item in base.Items)
             {

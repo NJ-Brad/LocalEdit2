@@ -10,7 +10,7 @@ namespace LocalEdit2.Modals
     {
         //private Modal? modalRef;
         public C4TypeEnum ParentType { get; set; } = C4TypeEnum.Unknown;
-        public C4FlatItem SelectedNode { get; set; } = new ();
+        public C4FlatItem? SelectedNode { get; set; } = null;
 
         private Select<C4TypeEnum>? itemTypeCombo { get; set; }
 

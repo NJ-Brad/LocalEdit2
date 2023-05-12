@@ -6,7 +6,7 @@ namespace LocalEdit2.Modals
 {
     public partial class SprintModal : LE_ModalBase
     {
-        bool adding = false;
+        //bool adding = false;
 
         [Parameter]
         public Sprint Item { get; set; } = new();

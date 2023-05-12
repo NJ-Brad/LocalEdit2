@@ -85,20 +85,22 @@ namespace LocalEdit2.Modals
             int rtnVal = -1;
             try
             {
-                int numItems = (Item != null) ? Item.Dependencies.Count : 0;
-
-                for (int itemNum = 0; itemNum < numItems; itemNum++)
+                if (Item != null)
                 {
-                    if (Item.Dependencies[itemNum].ID == value)
+                    int numItems = (Item != null) ? Item.Dependencies.Count : 0;
+
+                    for (int itemNum = 0; itemNum < numItems; itemNum++)
                     {
-                        rtnVal = itemNum;
+                        if (Item?.Dependencies[itemNum].ID == value)
+                        {
+                            rtnVal = itemNum;
+                        }
                     }
                 }
-
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(ex.ToString());                
             }
             return rtnVal;
         }

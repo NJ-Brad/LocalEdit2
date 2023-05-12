@@ -8,11 +8,13 @@
             <CloseButton />
         </ModalHeader>
         <ModalBody>
-            @*https://blazorise.com/docs/components/validation*@
-            @*<Validations Mode="ValidationMode.Manual">*@
-            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
-                <Blazorise.ValidationSummary Label="The following errors were found..." />
-                @*    <Field>
+            @if (Item != null)
+            {
+                @*https://blazorise.com/docs/components/validation*@
+                @*<Validations Mode="ValidationMode.Manual">*@
+                <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                    <Blazorise.ValidationSummary Label="The following errors were found..." />
+                    @*    <Field>
                     <FieldLabel>Name with validation</FieldLabel>
                     <Validation Validator="ValidationRule.IsNotEmpty">
                     <Blazorise.TextEdit Placeholder="Enter name (validated)">
@@ -26,68 +28,71 @@
                     </Field>
                 *@
 
-                @if (Item != null)
-                {
-                    <Field>
-                        <FieldLabel>Label</FieldLabel>
-                        <Validation Validator="ValidationRule.IsNotEmpty">
-                            <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
-                                <Feedback>
-                                    <ValidationError>Please enter the label.</ValidationError>
-                                </Feedback>
-                            </TextEdit>
-                        </Validation>
-                    </Field>
-
-                    <Field   
-
-                Horizontal
-                    >
-                        <FieldLabel ColumnSize="ColumnSize.Is3">Story ID</FieldLabel>
-                        <FieldBody ColumnSize="ColumnSize.Is9">
-                            <TextEdit @bind-Text="Item.StoryId" Placeholder="Enter story ID" />
-                        </FieldBody>
-                    </Field>
-
-                    <Field   
-
-                Horizontal
-                    >
-                        <FieldLabel ColumnSize="ColumnSize.Is3">Duration</FieldLabel>
-                        <FieldBody ColumnSize="ColumnSize.Is5">
+                    @if (Item != null)
+                    {
+                        <Field>
+                            <FieldLabel>Label</FieldLabel>
                             <Validation Validator="ValidationRule.IsNotEmpty">
-                                <TextEdit @bind-Text="Item.Duration" Placeholder="Enter duration">
+                                <TextEdit @bind-Text="Item.Label" Placeholder="Enter label">
                                     <Feedback>
-                                        <ValidationError>Please enter the duration.</ValidationError>
+                                        <ValidationError>Please enter the label.</ValidationError>
                                     </Feedback>
                                 </TextEdit>
                             </Validation>
-                        </FieldBody>
-                        Days
-                    </Field>
+                        </Field>
 
-                    @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+                        <Field   
+
+
+                Horizontal
+                        >
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Story ID</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit @bind-Text="Item.StoryId" Placeholder="Enter story ID" />
+                            </FieldBody>
+                        </Field>
+
+                        <Field   
+
+
+                Horizontal
+                        >
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Duration</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is5">
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="Item.Duration" Placeholder="Enter duration">
+                                        <Feedback>
+                                            <ValidationError>Please enter the duration.</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </FieldBody>
+                            Days
+                        </Field>
+
+                        @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
                 Depends On
                 </Span>
                 <br />
                 *@
-                    <h3>Depends On</h3>
-                    <div style="overflow-y : auto; height:150px">
-                        @foreach (var item in @Items)
-                        {
-                            @*<SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>*@
-                            @*<Check TValue="bool" Checked="@rememberMe" CheckedChanged="@OnRememberMeChanged">Remember Me</Check>*@
-                            @*<Check TValue="bool" CheckedChanged="@OnRememberMeChanged">@(item.Label)</Check>*@
-                            <Check TValue="bool" Checked="@(IsChecked(item.ID))" CheckedChanged="@(() => OnRememberMeChanged2(item.ID))">@(
+                        <h3>Depends On</h3>
+                        <div style="overflow-y : auto; height:150px">
+                            @foreach (var item in @Items)
+                            {
+                                @*<SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>*@
+                                @*<Check TValue="bool" Checked="@rememberMe" CheckedChanged="@OnRememberMeChanged">Remember Me</Check>*@
+                                @*<Check TValue="bool" CheckedChanged="@OnRememberMeChanged">@(item.Label)</Check>*@
+                                <Check TValue="bool" Checked="@(IsChecked(item.ID ?? ""))" CheckedChanged="@(() => OnRememberMeChanged2(item.ID ?? ""))">
+                                    @(
                         item.Label
 )</Check>
-                        }
-                    </div>
-                    @*                <br />
+                            }
+                        </div>
+                        @*                <br />
                 <h3>Earliest Start Date</h3>
                 <DateEdit TValue="DateTime?" Date="@earliestDate" DateChanged="@OnDateChanged" />
 *@
-                    @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
+                        @*                <Span Style="font-size: calc(1.3rem + .6vw); font-weight: 500; line-height: 1.2; margin-top: 0.5rem;margin-bottom: 0.25rem;">
                     Depends On
 
                     <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewDependency">
@@ -154,11 +159,9 @@
                     </EmptyTemplate>
                 </DataGrid>
 *@
-                }
-            </Validations>
-
-
-
+                    }
+                </Validations>
+        }
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>

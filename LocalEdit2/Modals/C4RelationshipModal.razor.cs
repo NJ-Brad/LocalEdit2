@@ -20,16 +20,21 @@ namespace LocalEdit2.Modals
         public C4Relationship Item { get; set; } = new();
 
         [Parameter]
-//        public List<C4Item> Items
-        public ObservableCollection<C4Item> Items
+        //        public List<C4Item> Items
+#pragma warning disable BL0007 // Component parameters should be auto properties
+        public ObservableCollection<C4Item>? Items
+#pragma warning restore BL0007 // Component parameters should be auto properties
         { get => items;
             set { 
                 items = value;
-                GetAllItems(items);
+                if (items != null)
+                {
+                    GetAllItems(items);
+                }
             } 
         }
 
-        private ObservableCollection<C4Item> items = new ();
+        private ObservableCollection<C4Item>? items = new ();
         //private List<C4Item> items = new();
 
         public List<C4Item> AllItems { get; set; } = new();

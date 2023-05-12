@@ -24,7 +24,8 @@ namespace LocalEdit2.Shared
                 if (firstRender)
                 {
                     // This is to get the Id value set.  If this is removed, or too short, the graph will not display
-                    Task.Delay(100);
+                    // AND if you don't await it, things are dicey.  DAMHIKT
+                    await Task.Delay(100);
                     await this.JsRuntime.InvokeVoidAsync("JsFunctions.MermaidInitialize");
                     await OnParametersSetAsync();
                 }

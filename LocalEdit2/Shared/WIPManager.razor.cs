@@ -9,7 +9,7 @@ namespace LocalEdit2.Shared
     public partial class WIPManager
     {
         [Inject]
-        public Blazored.LocalStorage.ILocalStorageService localStorage { get; set; }
+        public Blazored.LocalStorage.ILocalStorageService? localStorage { get; set; }
 
         [Parameter] 
         public EventCallback DataRequired { get; set; }
@@ -29,9 +29,16 @@ namespace LocalEdit2.Shared
 
         public async Task <bool> DataExists()
         {
-            data = await localStorage.GetItemAsStringAsync($"{EditorName}_WIP");
+            if (localStorage == null) 
+            {
+                data = "";
+            }
+            else
+            {
+                data = await localStorage.GetItemAsStringAsync($"{EditorName}_WIP");
+            }
 
-            return data != null;
+            return !string.IsNullOrEmpty(data);
         }
 
         private string data = "";
@@ -41,10 +48,8 @@ namespace LocalEdit2.Shared
                 data = value;
                 if (prevData != data)
                 {
-                    _ = localStorage.SetItemAsStringAsync($"{EditorName}_WIP", data);
-                    //DisplayText = "Saved";
-//                    DateTime calcCurrentTime = LocalEdit2.Shared.DateTimeExtension.ToRealLocalTime(DateTime.Now);
-//                    DisplayText = $"Last Saved: {calcCurrentTime.ToShortTimeString()}";
+                    if(localStorage != null)
+                        _ = localStorage.SetItemAsStringAsync($"{EditorName}_WIP", data);
                 }
 
                 // This should reflect "last attempted save", whether there was an actual update or not
@@ -55,8 +60,8 @@ namespace LocalEdit2.Shared
 
         public async Task Load()
         {
-//            await localStorage.SetItemAsync("name", "John Smith");
-            data = await localStorage.GetItemAsStringAsync($"{EditorName}_WIP");
+            if(localStorage !=null)
+                data = await localStorage.GetItemAsStringAsync($"{EditorName}_WIP");
 
             _ = OnDataReady();
         }
@@ -194,7 +199,7 @@ namespace LocalEdit2.Shared
 
         ////private double elapsedtime;
 
-        private bool running = false;
+        //private bool running = false;
 
         //[Parameter]
         //public EventCallback Ticked
@@ -255,7 +260,7 @@ namespace LocalEdit2.Shared
                 this._timer = new Timer(new TimerCallback(TimerTicked), null, 0, this.Interval * 1000);
             }
             //this.startTime = DateTime.Now;
-            this.running = true;
+            //this.running = true;
         }
 
         public void Stop()

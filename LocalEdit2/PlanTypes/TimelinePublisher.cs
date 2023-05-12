@@ -15,8 +15,10 @@ namespace LocalEdit2.PlanTypes
         {
             StringBuilder sb = new();
 
+            DateOnly start = plan.StartDate == null ? DateOnly.FromDateTime(DateTime.Now) : DateOnly.Parse(plan.StartDate);
+
             // Get plan ready for publishing
-            List<PlanItem> items = DependencySorter.Generate(plan.Items, DateOnly.Parse(plan.StartDate));
+            List<PlanItem> items = DependencySorter.Generate(plan.Items, start);
 
             sb.AppendLine(MermaidHeader(plan));
 

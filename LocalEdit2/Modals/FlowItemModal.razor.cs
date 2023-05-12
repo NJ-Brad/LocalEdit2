@@ -7,10 +7,10 @@ namespace LocalEdit2.Modals
     public partial class FlowItemModal : LE_ModalBase
     {
         [Parameter]
-        public FlowItem Item { get; set; } = null;
+        public FlowItem? Item { get; set; } = null;
 
         [Parameter]
-        public List<FlowItem> Items { get; set; } = new();
+        public List<FlowItem>? Items { get; set; } = null;
 
         public FlowRelationship? SelectedRelationshipRow { get; set; } = null;
         private FlowRelationshipModal? FlowRelationshipModalRef;
@@ -38,7 +38,7 @@ namespace LocalEdit2.Modals
         {
             FlowRelationship newRelationship = new()
             {
-                From = Item?.id,
+                From = Item?.id ?? "",
                 Label = "New Relationship"
             };
 
@@ -53,12 +53,15 @@ namespace LocalEdit2.Modals
         {
             string rtnVal = id;
 
-            foreach (FlowItem fi in Items)
+            if (Items != null)
             {
-                if (fi.id == id)
+                foreach (FlowItem fi in Items)
                 {
-                    rtnVal = fi.title;
-                    break;
+                    if (fi.id == id)
+                    {
+                        rtnVal = fi.title ?? $"{fi.id}";
+                        break;
+                    }
                 }
             }
 

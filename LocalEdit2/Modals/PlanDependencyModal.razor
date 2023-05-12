@@ -6,32 +6,40 @@
             <CloseButton />
         </ModalHeader>
         <ModalBody>
-            @*https://blazorise.com/docs/components/validation*@
-            @*<Validations Mode="ValidationMode.Manual">*@
-            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
-                <Blazorise.ValidationSummary Label="The following errors were found..." />
-                <Field>
+            @if (Item != null)
+            {
+                @*https://blazorise.com/docs/components/validation*@
+                @*<Validations Mode="ValidationMode.Manual">*@
+                <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                    <Blazorise.ValidationSummary Label="The following errors were found..." />
+                    <Field>
 
-                    <FieldLabel>Dependency Type</FieldLabel>
-                    <Validation Validator="ValidationRule.IsNotEmpty">
-                    <Select TValue="string" @bind-SelectedValue="@Item.DependencyType">
-                            <SelectItem Value="@string.Empty" Disabled>- Select an Item -</SelectItem>
-                            <SelectItem Value=@("DATE")>Date</SelectItem>
-                        <SelectItem Value=@("OTHER")>Other Item</SelectItem>
-                    </Select>
-                    </Validation>
-                </Field>
+                        <FieldLabel>Dependency Type</FieldLabel>
+                        <Validation Validator="ValidationRule.IsNotEmpty">
+                            <Select TValue="string" @bind-SelectedValue="@Item.DependencyType">
+                                <SelectItem Value="@string.Empty"    
+                            Disabled
+                                >- Select an Item -</SelectItem>
+                                <SelectItem Value=@("DATE")>Date</SelectItem>
+                                <SelectItem Value=@("OTHER")>Other Item</SelectItem>
+                            </Select>
+                        </Validation>
+                    </Field>
 
-                <Field>
-                    <FieldLabel>Other Item ID</FieldLabel>
-                    <Validation Validator="ValidateId">
-                        <Select TValue="string" @bind-SelectedValue="@Item.ID">
-                        <SelectItem Value="@string.Empty" Disabled>- Select an Item -</SelectItem>
-                        @foreach (var item in Items)
-                        {
-                            <SelectItem Value="@(item.ID)">@(item.Label)</SelectItem>
-                        }
-                    </Select>
+                    <Field>
+                        <FieldLabel>Other Item ID</FieldLabel>
+                        <Validation Validator="ValidateId">
+                            <Select TValue="string" @bind-SelectedValue="@Item.ID">
+                                <SelectItem Value="@string.Empty" 
+                            Disabled
+                                >- Select an Item -</SelectItem>
+                                @foreach (var item in Items)
+                                {
+                                    <SelectItem Value="@(item.ID)">@(
+                                     item.Label
+                                     )</SelectItem>
+                                }
+                            </Select>
                     </Validation>
                 </Field>
 
@@ -54,9 +62,8 @@
                     </Addons>
                     </Validation>
                 </Field>
-
-
             </Validations>
+            }
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@CloseModal">Cancel</Button>

@@ -13,7 +13,7 @@ namespace LocalEdit2.PlanTypes
             List<PlanItem> rtnVal = new List<PlanItem>(originalItemList.Count);    // setting the the correct length means that it doesn't have to waste time expanding later
             List<PlanItem> itemsToAdd = new List<PlanItem>(originalItemList);
 
-            int removedItemCount = 0;
+            //int removedItemCount = 0;
             while (itemsToAdd.Count > 0)
             {
                 for (int itemNum = 0; itemNum < itemsToAdd.Count; itemNum++)
@@ -151,7 +151,8 @@ namespace LocalEdit2.PlanTypes
                 removedItemCount = itemsToRemove.Count;
                 foreach (PlanItem itemToRemove in itemsToRemove)
                 {
-                    startDate = itemToRemove.EndDate.Value.AddDays(1);
+                    if(itemToRemove.EndDate.HasValue)
+                        startDate = itemToRemove.EndDate.Value.AddDays(1);
 
                     foreach (PlanItem item in inFiles)
                     {

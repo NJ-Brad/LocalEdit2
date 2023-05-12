@@ -66,23 +66,11 @@ namespace LocalEdit2.Pages
         C4ItemEditModal? c4ItemModalRef = null;
         C4FlatItemEditModal? c4FlatItemModalRef = null;
 
-        Blazorise.TreeView.TreeView<C4Item>? c4Tree { get; set; }
-
-        bool dataHasChanged = false;
+//        bool dataHasChanged = false;
 
         protected override Task OnInitializedAsync()
         {
             return base.OnInitializedAsync();
-        }
-
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (dataHasChanged)
-            {
-                dataHasChanged = false;
-                c4Tree.Nodes = Document.Model;
-            }
-            return base.OnAfterRenderAsync(firstRender);
         }
 
         private Task ShowItemModal()
@@ -161,8 +149,8 @@ namespace LocalEdit2.Pages
             int insertLoc = Document.FlatModel.GetAddIndex(selectedFlatItem);
 
             C4FlatItem newItem = new();
-            newItem.Level = selectedFlatItem.Level;
-            newItem.ParentAlias = selectedFlatItem.ParentAlias;
+            newItem.Level = selectedFlatItem == null ? 0 : selectedFlatItem.Level;
+            newItem.ParentAlias = selectedFlatItem == null ? "" : selectedFlatItem.ParentAlias;
             if (insertLoc != -1)
             {
                 Document.FlatModel.Insert(insertLoc, newItem);
@@ -207,12 +195,19 @@ namespace LocalEdit2.Pages
             if (Document == null)
                 return Task.CompletedTask;
 
+            // selection HAS to exist, or we shouldn't be here
+            if(selectedFlatItem == null)
+            {
+                throw new ArgumentNullException(nameof(selectedFlatItem));
+            }
+
             // Add a new item, at this level, after this item and before the next item at this level
             int insertLoc = Document.FlatModel.GetAddChildIndex(selectedFlatItem);
 
             C4FlatItem newItem = new();
             newItem.Level = selectedFlatItem.Level + 1;
             newItem.ParentAlias = selectedFlatItem.Alias;
+
             if (insertLoc != -1)
             {
                 Document.FlatModel.Insert(insertLoc, newItem);
@@ -249,6 +244,9 @@ namespace LocalEdit2.Pages
 
         private Task EditFlatItem()
         {
+            if(Document == null)
+                throw new ArgumentNullException(nameof (Document));
+
             C4FlatItem? parent = selectedFlatItem == null ? null : Document.FlatModel.FindByAlias(selectedFlatItem.ParentAlias);
 
             C4TypeEnum parentType = parent == null ? C4TypeEnum.Unknown : parent.ItemType;
@@ -412,9 +410,6 @@ namespace LocalEdit2.Pages
             }
             adding = false;
 
-            dataHasChanged = true;
-            c4Tree.Nodes = null;
-
             InvokeAsync(() => StateHasChanged());
 
             return Task.CompletedTask;
@@ -422,6 +417,9 @@ namespace LocalEdit2.Pages
 
         private Task OnC4FlatItemModalClosed()
         {
+            if (Document == null)
+                throw new ArgumentNullException(nameof(Document));
+
             if (adding)
             {
                 // remove the new item, if add was cancelled
@@ -549,11 +547,6 @@ namespace LocalEdit2.Pages
                 SelectedNode = null;
             }
 
-            if(Document != null) {
-                dataHasChanged = true;
-                c4Tree.Nodes = null;
-            }
-
             InvokeAsync(() => StateHasChanged());
 
             return Task.CompletedTask;
@@ -561,6 +554,9 @@ namespace LocalEdit2.Pages
 
         private Task DeleteFlatItem()
         {
+            if (Document == null)
+                throw new ArgumentNullException(nameof(Document));
+
             if (SelectedFlatItem != null)
             {
                 int itemIndex = Document.FlatModel.IndexOf(SelectedFlatItem);
@@ -634,7 +630,7 @@ namespace LocalEdit2.Pages
         string diagramTwoText = string.Empty;
         string diagramThreeText = string.Empty;
 
-        private async Task OnSelectedTabChanged(string name)
+        private Task OnSelectedTabChanged(string name)
         {
             selectedTab = name;
 
@@ -645,7 +641,7 @@ namespace LocalEdit2.Pages
                 diagramThreeText = C4Publisher.Publish(Document, "Component");
             }
 
-            return;
+            return Task.CompletedTask;
         }
 
         // https://stackoverflow.com/questions/66965107/blazor-how-to-conditionally-style-an-element

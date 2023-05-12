@@ -10,6 +10,6 @@ namespace LocalEdit2.FlowTypes
         public string? title { get; set; } = "";
         public List<object> queryLogic { get; set; } = new();
         public List<object> flowEntryLogic { get; set; } = new();
-        public List<FlowRelationship>? NextItems { get; set; } = new List<FlowRelationship>();
+        public List<FlowRelationship> NextItems { get; set; } = new List<FlowRelationship>();
     }
 }

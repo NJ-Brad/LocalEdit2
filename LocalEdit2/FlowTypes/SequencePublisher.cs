@@ -77,7 +77,7 @@ namespace LocalEdit2.FlowTypes
             {
                 if (fi.id == id)
                 {
-                    rtnVal = fi.title;
+                    rtnVal = fi.title ?? "";
                     break;
                 }
             }

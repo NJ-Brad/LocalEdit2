@@ -11,7 +11,7 @@ namespace LocalEdit2.Modals
         public string? QuestionText { get; set; } = "I have a question for you";
         public List<string> Buttons { get; set; } = new List<string>();
         public MarkupString MarkedUpQuestionText { get {
-                return new MarkupString(QuestionText);
+                return new MarkupString(QuestionText ?? "");
             } }
 
         public void ShowModal(string MessageBoxID, string Title, string QuestionText, List<string> Buttons)

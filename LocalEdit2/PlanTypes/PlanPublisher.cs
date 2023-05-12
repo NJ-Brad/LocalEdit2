@@ -27,8 +27,9 @@ namespace LocalEdit2.PlanTypes
                 string tempText = JsonSerializer.Serialize(plan, new JsonSerializerOptions { WriteIndented = true }); ;
                 PlanDocument doc = (JsonSerializer.Deserialize(tempText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
 
-                // this is destructive to item dependencies
-                List<PlanItem> items = DependencySorter.Generate(doc.Items, DateOnly.Parse(doc.StartDate));
+                DateOnly start = doc.StartDate == null ? DateOnly.FromDateTime(DateTime.Now) : DateOnly.Parse(doc.StartDate);
+
+                List<PlanItem> items = DependencySorter.Generate(doc.Items, start);
 
                 //foreach (PlanItem item in plan.Items)
                 foreach (PlanItem item in items)

@@ -105,8 +105,10 @@ namespace LocalEdit2.FlowTypes
             string indentation = BuildIndentation(indent);
 
             // https://bobbyhadz.com/blog/javascript-typeerror-replaceall-is-not-a-function
-            string brokenLabel = String.Join("<br/>", item.title.Split("`"));
-
+            string brokenLabel = "";
+            if (item.title != null) { 
+                brokenLabel = String.Join("<br/>", value: item.title.Split("`"));
+            }
             brokenLabel = $"\"{brokenLabel}\"";
 
             sb.AppendLine(@$"{indentation}{item.id}[{brokenLabel}]");

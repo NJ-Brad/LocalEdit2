@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Blazorise;
-using LocalEdit2.C4Types;
 using LocalEdit2.Modals;
 using LocalEdit2.FlowTypes;
-using Blazorise.Components;
 using System.Text.Json;
 //using StardustDL.RazorComponents.Markdown;
-using LocalEdit2.Shared;
-using LocalEdit2.PlanTypes;
-using LocalEdit2.FlowTypes;
 using Octokit;
-using System.Linq.Expressions;
 
 namespace LocalEdit2.Pages
 {
@@ -23,17 +17,17 @@ namespace LocalEdit2.Pages
 
         protected override Task OnInitializedAsync()
         {
-            Document = new()
-            {
-                items = new List<FlowItem>(new[]
-            {
-//            C4TestData.InternalPerson,
-            new FlowItem{id = "Q1", title="Screen One"},
-            new FlowItem{id = "Q2", title="Screen Two"},
-            new FlowItem{id = "Q3", title="Screen Three"},
-            new FlowItem{id = "Q4", title="Screen Four"}
-        })
-            };
+//            Document = new()
+//            {
+//                items = new List<FlowItem>(new[]
+//            {
+////            C4TestData.InternalPerson,
+//            new FlowItem{id = "Q1", title="Screen One"},
+//            new FlowItem{id = "Q2", title="Screen Two"},
+//            new FlowItem{id = "Q3", title="Screen Three"},
+//            new FlowItem{id = "Q4", title="Screen Four"}
+//        })
+//            };
 
             return base.OnInitializedAsync();
         }
@@ -56,7 +50,7 @@ namespace LocalEdit2.Pages
 
                     if (numItems > 1) 
                     {
-                        int rowPosition = GetPosition(selectedItemRow.id);
+                        int rowPosition = GetPosition(selectedItemRow.id ?? "");
                         if (rowPosition != -1)  // there is a selection
                         {
                             if(rowPosition > 0)
@@ -122,17 +116,19 @@ namespace LocalEdit2.Pages
             //return Task.CompletedTask;
         }
 
-        private async Task UpdatePreview()
+        private Task UpdatePreview()
         {
-            diagramOneText = FlowPublisher.Publish(Document);
+            diagramOneText = Document == null ? "" : FlowPublisher.Publish(Document);
+            return Task.CompletedTask;
         }
 
-        private async Task UpdatePreview2()
+        private Task UpdatePreview2()
         {
-            diagramTwoText = SequencePublisher.Publish(Document);
+            diagramTwoText = Document == null ? "" : SequencePublisher.Publish(Document);
+            return Task.CompletedTask;
         }
 
-            private Task NewFlow()
+        private Task NewFlow()
         {
             if (FileManagementModalRef != null)
                 FileManagementModalRef.Name = "New_Flow.json";
@@ -223,7 +219,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedItemRow != null)
             {
-                int position = GetPosition(SelectedItemRow.id);
+                int position = GetPosition(SelectedItemRow.id ?? "");
 
                 if (position != -1)
                 {
@@ -243,7 +239,7 @@ namespace LocalEdit2.Pages
         {
             if (SelectedItemRow != null)
             {
-                int position = GetPosition(SelectedItemRow.id);
+                int position = GetPosition(SelectedItemRow.id ?? "");
 
                 if(position != -1)
                 {
@@ -369,7 +365,7 @@ namespace LocalEdit2.Pages
                     Document = null;
                 }
 
-                InvokeAsync(() => StateHasChanged());
+                //InvokeAsync(() => StateHasChanged());
             }
             //return Task.CompletedTask;
             return;

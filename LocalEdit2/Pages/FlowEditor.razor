@@ -48,128 +48,139 @@
         Export HTML
     </Button>
 
+    @if (Document != null)
+    {
+        <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+            <Items>
+                <Tab Name="general">General</Tab>
+                <Tab Name="model">Model</Tab>
+                <Tab Name="preview">Preview (Flow Diagram)</Tab>
+                <Tab Name="preview2">Preview (Sequence Diagram)</Tab>
+            </Items>
+            <Content>
+                <TabPanel Name="general"  Border="Border.Primary">
 
-<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
-    <Items>
-        <Tab Name="general">General</Tab>
-        <Tab Name="model">Model</Tab>
-        <Tab Name="preview">Preview (Flow Diagram)</Tab>
-        <Tab Name="preview2">Preview (Sequence Diagram)</Tab>
-    </Items>
-    <Content>
-        <TabPanel Name="general"  Border="Border.Primary">
+                    <Div Style="margin:20px">
 
-<Div Style="margin:20px">
+                        <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@Document.hasHeader">Has Header</Check>
+                            </Field>
+                            <Field>
+                                <Check TValue="bool" @bind-Checked="@Document.hasFooter">Has Footer</Check>
+                            </Field>
 
-            <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
-                <Field>
-                    <Check TValue="bool" @bind-Checked="@Document.hasHeader">Has Header</Check>
-                </Field>
-                <Field>
-                    <Check TValue="bool" @bind-Checked="@Document.hasFooter">Has Footer</Check>
-                </Field>
+                            <Field>
+                                <FieldLabel>Phone Number</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="Document.headerConfig.phoneNumber" Placeholder="Enter phone number">
+                                        <Feedback>
+                                            <ValidationError>Please enter the label.</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                            <Field>
+                                <FieldLabel>Url</FieldLabel>
+                                <Validation Validator="ValidationRule.IsNotEmpty">
+                                    <TextEdit @bind-Text="Document.headerConfig.logo" Placeholder="Enter logo">
+                                        <Feedback>
+                                            <ValidationError>Please enter the label.</ValidationError>
+                                        </Feedback>
+                                    </TextEdit>
+                                </Validation>
+                            </Field>
+                        </Validations>
+                    </Div>
+                </TabPanel>
 
-                <Field>
-                <FieldLabel>Phone Number</FieldLabel>
-                <Validation Validator="ValidationRule.IsNotEmpty">
-                    <TextEdit @bind-Text="Document.headerConfig.phoneNumber" Placeholder="Enter phone number">
-                        <Feedback>
-                            <ValidationError>Please enter the label.</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Validation>
-            </Field>
-            <Field>
-                <FieldLabel>Url</FieldLabel>
-                <Validation Validator="ValidationRule.IsNotEmpty">
-                    <TextEdit @bind-Text="Document.headerConfig.logo" Placeholder="Enter logo">
-                        <Feedback>
-                            <ValidationError>Please enter the label.</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Validation>
-            </Field>
-            </Validations>
-            </Div>
-        </TabPanel>
+                <TabPanel Name="model"  Border="Border.Primary">
+                    <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
+                        <Icon Name="IconName.Add" />
+                        New
+                    </Button>
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary"    
+                Disabled
+                        >
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowItemModal">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                    }
 
-        <TabPanel Name="model"  Border="Border.Primary">
-<Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewItem">
-    <Icon Name="IconName.Add" />
-    New
-</Button>
-@if (SelectedItemRow == null)
-{
-    <Button Size="Size.Small" Color="Color.Primary" Disabled>
-        <Icon Name="IconName.Edit" />
-        Edit
-    </Button>
-}
-@if (SelectedItemRow != null)
-{
-    <Button Size="Size.Small" Color="Color.Primary" Clicked="@ShowItemModal">
-        <Icon Name="IconName.Edit" />
-        Edit
-    </Button>
-}
+                    @if (SelectedItemRow == null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary"     
+                Disabled
+                        >
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
+                    @if (SelectedItemRow != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    }
 
-@if (SelectedItemRow == null)
-{
-    <Button Size="Size.Small" Color="Color.Primary" Disabled>
-    <Icon Name="IconName.Delete" />
-    Delete
-</Button>
-}
-@if (SelectedItemRow != null)
-{
-    <Button Size="Size.Small" Color="Color.Primary" Clicked="@DeleteItem">
-    <Icon Name="IconName.Delete" />
-    Delete
-</Button>
-}
+                    @if (!downAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary"    
+                Disabled
+                        >
+                            <Icon Name="IconName.ArrowDown" />
+                            Move Down
+                        </Button>
+                    }
+                    @if (downAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemDown">
+                            <Icon Name="IconName.ArrowDown" />
+                            Move Down
+                        </Button>
+                    }
 
-            @if (!downAllowed)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.ArrowDown" />
-                    Move Down
-                </Button>
-            }
-            @if (downAllowed)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemDown">
-                    <Icon Name="IconName.ArrowDown" />
-                    Move Down
-                </Button>
-            }
+                    @if (!upAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary"       
+                Disabled
+                        >
+                            <Icon Name="IconName.ArrowUp" />
+                            Move Up
+                        </Button>
+                    }
+                    @if (upAllowed)
+                    {
+                        <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemUp">
+                            <Icon Name="IconName.ArrowUp" />
+                            Move Up
+                        </Button>
+                    }
 
-            @if (!upAllowed)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Disabled>
-                    <Icon Name="IconName.ArrowUp" />
-                    Move Up
-                </Button>
-            }
-            @if (upAllowed)
-            {
-                <Button Size="Size.Small" Color="Color.Primary" Clicked="@ItemUp">
-                    <Icon Name="IconName.ArrowUp" />
-                    Move Up
-                </Button>
-            }
+                    <DataGrid TItem="FlowItem"
+                    Data="@Document?.items"
+                    @bind-SelectedRow="@SelectedItemRow"
+                    RowDoubleClicked="@ShowItemModal"
+                    ShowPager=false
+                    PageSize="50"
 
-<DataGrid TItem="FlowItem"
-          Data="@Document?.items"
-          @bind-SelectedRow="@SelectedItemRow"
-                          RowDoubleClicked="@ShowItemModal"
-                          ShowPager=false
-                          PageSize="50"
-                    FixedHeader FixedHeaderDataGridHeight="300px">
-                <DataGridColumn Field="@nameof( FlowItem.title )" Editable="false"></DataGridColumn>
-</DataGrid>
+                FixedHeader
+                    FixedHeaderDataGridHeight="300px">
+                        <DataGridColumn Field="@nameof( FlowItem.title )" Editable="false"></DataGridColumn>
+                    </DataGrid>
 
-</TabPanel>
-@*        <TabPanel Name="relations"  Border="Border.Primary">
+                </TabPanel>
+                @*        <TabPanel Name="relations"  Border="Border.Primary">
 <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewRelationship">
     <Icon Name="IconName.Add" />
     New
@@ -239,29 +250,34 @@
     </EmptyTemplate>
 </DataGrid>
 </TabPanel>*@
-        <TabPanel Name="preview"  Border="Border.Primary">
-@*<button class="btn btn-primary" @onclick="GenerateMarkdown">Generate</button>*@
+                <TabPanel Name="preview"  Border="Border.Primary">
+                    @*<button class="btn btn-primary" @onclick="GenerateMarkdown">Generate</button>*@
 
-@*
+                    @*
 <div>
     <textarea @bind="MarkdownText" @bind:event="oninput" style="width:100%;"/>
 </div>
 *@
 
-@*<StardustDL.RazorComponents.Markdown.MarkdownRenderer
+                    @*<StardustDL.RazorComponents.Markdown.MarkdownRenderer
     @ref="markdownRef"
     Value="@MarkdownText"
     Class="your class"
     Style="your styles"
     />
 *@
-       <Mermaid GraphText="@diagramOneText"></Mermaid>
-</TabPanel>
-            <TabPanel Name="preview2" Border="Border.Primary">
-                <Mermaid GraphText="@diagramTwoText"></Mermaid>
-            </TabPanel>
-        </Content>
-</Tabs>
+                    <Mermaid GraphText="@diagramOneText"></Mermaid>
+                </TabPanel>
+                <TabPanel Name="preview2" Border="Border.Primary">
+                    <Mermaid GraphText="@diagramTwoText"></Mermaid>
+                </TabPanel>
+            </Content>
+        </Tabs>
+    }
+    @if(Document == null)
+    {
+        @("No document selected")
+    }
 </Div>
 @*
             <Div Style="float: left;height: 470px;width: 50%;padding: 0 10px; ">

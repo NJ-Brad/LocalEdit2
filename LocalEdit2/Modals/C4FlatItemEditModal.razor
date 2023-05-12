@@ -9,7 +9,8 @@
             <CloseButton />
         </ModalHeader>
         <ModalBody>
-
+            @if (SelectedNode != null)
+            {
 @*https://blazorise.com/docs/components/validation*@
 @*<Validations Mode="ValidationMode.Manual">*@
 <Validations @ref="validations" Mode="ValidationMode.Manual" ValidateOnLoad=false>
@@ -59,8 +60,12 @@
     <Field>
         <Switch TValue="bool" @bind-Checked="@SelectedNode.IsExternal">External</Switch>
     </Field>
-
 </Validations>
+            }
+            @if (SelectedNode == null)
+            {
+                @("No node selected")
+            }
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@CloseModal">Close</Button>
