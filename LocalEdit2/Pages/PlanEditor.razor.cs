@@ -8,44 +8,15 @@ using System.Text.Json;
 //using StardustDL.RazorComponents.Markdown;
 using LocalEdit2.Shared;
 using Blazorise.DataGrid;
-using System.Threading.Channels;
-using System.Xml.Linq;
+using LocalEdit2.DocumentTypes;
 
 namespace LocalEdit2.Pages
 {
     public partial class PlanEditor : ComponentBase
     {
-        // Add
-        // Click Add
-        // Create new record
-        // set modalObject to new record
-        // Open editor
-        // When editor closes
-        // If cancelled - exit
-        // else add record to tree and model
-
-        // Update
-        // click edit
-        // create new record
-        // copy selected record to new record
-        // set modalObject to new record
-        // open editor
-        // When editor closes
-        // If cancelled - exit
-        // else update model and tree
-
-        //void Edit()
-        //{
-
-        //}
-
-        //        MarkdownRenderer markdownRef = null;
-        //Mermaid mermaidOne;
-
-        //void OnClickNode(string nodeId)
-        //{
-        //    // TODO: do something with nodeId
-        //}
+        // Dynamicly inject from our DI container
+        [Inject]
+        public IDocumentDataService? DocumentDataService { get; set; }
 
         //Mermaid? MermaidOne { get; set; }
         string graphOneText { get; set; } = "";
@@ -60,7 +31,7 @@ namespace LocalEdit2.Pages
         bool useBuiltInEditor = false;
         private DataGridEditMode sprintEditMode = DataGridEditMode.Inline;
 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             Document = new()
             {
@@ -87,7 +58,7 @@ namespace LocalEdit2.Pages
                 })
             };
 
-            return base.OnInitializedAsync();
+//            return base.OnInitializedAsync();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -488,7 +459,7 @@ namespace LocalEdit2.Pages
         //    return rtnVal;
         //}
 
-        FileManagementModal? fileManagementModalRef;
+        DocumentManagementModal? DocumentManagementModalRef;
         MessageBox? messageBoxRef;
 
         Validations? validations;
@@ -532,8 +503,8 @@ namespace LocalEdit2.Pages
                 ImplementNewPlan();
             }
 
-            //if (fileManagementModalRef != null)
-            //    fileManagementModalRef.Name = "New_Plan.json";
+            //if (DocumentManagementModalRef != null)
+            //    DocumentManagementModalRef.Name = "New_Plan.json";
 
             //Document = new()
             //{
@@ -621,10 +592,10 @@ namespace LocalEdit2.Pages
             //}
             //flowItemModalRef.item = selectedItemRow;
 
-            fileManagementModalRef?.SaveFile(fileText);
+            DocumentManagementModalRef?.SaveFile(fileText);
             lastSavedDocumentText = fileText;
 
-            //fileManagementModalRef?.ShowModal();
+            //DocumentManagementModalRef?.ShowModal();
 
             //InvokeAsync(() => StateHasChanged());
 
@@ -637,10 +608,10 @@ namespace LocalEdit2.Pages
             {
                 GenerateGanntMarkdown();
 
-                if (fileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    fileManagementModalRef.Name = "plan.md";
-                    fileManagementModalRef.SaveFile(MarkdownText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "plan.md";
+                    DocumentManagementModalRef.SaveFile(MarkdownText);
                 }
             }
 
@@ -653,10 +624,10 @@ namespace LocalEdit2.Pages
             {
                 string htmlText = GenerateGanttHtml().Result;
 
-                if (fileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    fileManagementModalRef.Name = "plan.html";
-                    fileManagementModalRef.SaveFile(htmlText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "plan.html";
+                    DocumentManagementModalRef.SaveFile(htmlText);
                 }
             }
             return Task.CompletedTask;
@@ -668,10 +639,10 @@ namespace LocalEdit2.Pages
             {
                 GenerateTimelineMarkdown();
 
-                if (fileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    fileManagementModalRef.Name = "plan.md";
-                    fileManagementModalRef.SaveFile(MarkdownText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "plan.md";
+                    DocumentManagementModalRef.SaveFile(MarkdownText);
                 }
             }
 
@@ -684,22 +655,22 @@ namespace LocalEdit2.Pages
             {
                 string htmlText = GenerateTimelineHtml().Result;
 
-                if (fileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    fileManagementModalRef.Name = "plan.html";
-                    fileManagementModalRef.SaveFile(htmlText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "plan.html";
+                    DocumentManagementModalRef.SaveFile(htmlText);
                 }
             }
             return Task.CompletedTask;
         }
         private Task OnWipDataRequired()
         {
-            //if (fileManagementModalRef?.Result == ModalResult.OK)
+            //if (DocumentManagementModalRef?.Result == ModalResult.OK)
             //{
-            //    //MarkdownText = fileManagementModalRef.FileText;
-            //    if (fileManagementModalRef.FileText != null)
+            //    //MarkdownText = DocumentManagementModalRef.FileText;
+            //    if (DocumentManagementModalRef.FileText != null)
             //    {
-            //        Document = (JsonSerializer.Deserialize(fileManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
+            //        Document = (JsonSerializer.Deserialize(DocumentManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
             //    }
             //    InvokeAsync(() => StateHasChanged());
             //}
@@ -723,14 +694,14 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-        private Task OnFileManagementModalClosed()
+        private Task OnDocumentManagementModalClosed()
         {
-            if (fileManagementModalRef?.Result == ModalResult.OK)
+            if (DocumentManagementModalRef?.Result == ModalResult.OK)
             {
-                //MarkdownText = fileManagementModalRef.FileText;
-                if (fileManagementModalRef.FileText != null)
+                //MarkdownText = DocumentManagementModalRef.FileText;
+                if (DocumentManagementModalRef.FileText != null)
                 {
-                    Document = (JsonSerializer.Deserialize(fileManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
+                    Document = (JsonSerializer.Deserialize(DocumentManagementModalRef.FileText, typeof(PlanDocument)) as PlanDocument) ?? new PlanDocument();
                 }
                 InvokeAsync(() => StateHasChanged());
             }
@@ -846,14 +817,14 @@ namespace LocalEdit2.Pages
 
         private void ImplementLoadPlan()
         {
-            fileManagementModalRef?.LoadFile();
+            DocumentManagementModalRef?.LoadFile();
             lastSavedDocumentText = wIPManagerRef == null ? "" : wIPManagerRef.Data;
         }
 
         void ImplementNewPlan()
         {
-            if (fileManagementModalRef != null)
-                fileManagementModalRef.Name = "New_Plan.json";
+            if (DocumentManagementModalRef != null)
+                DocumentManagementModalRef.Document.DocumentTitle = "New_Plan.json";
 
             Document = new()
             {

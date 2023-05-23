@@ -197,6 +197,7 @@
             </Div>
         </TabPanel>
         <TabPanel Name="relations" Border="Border.Primary">
+            <Div Style="margin:20px; height:300px">
             <Button Size="Size.Small" Color="Color.Primary" Clicked="@AddNewRelationship">
                 <Icon Name="IconName.Add" />
                 New
@@ -259,7 +260,7 @@
                     </div>
                 </EmptyTemplate>
             </DataGrid>
-
+            </Div>
         </TabPanel>
         <TabPanel Name="preview" Border="Border.Primary">
 
@@ -287,4 +288,6 @@
 
 <LocalEdit2.Modals.C4RelationshipModal @ref="C4RelationshipModalRef" Items="@Document?.Model" Closed="@OnC4RelationshipModalClosed" Item="@SelectedRelationshipRow"></LocalEdit2.Modals.C4RelationshipModal>
 
-<LocalEdit2.Modals.FileManagementModal @ref="FileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal>
+@* <LocalEdit2.Modals.FileManagementModal @ref="FileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal> *@
+
+<LocalEdit2.Modals.DocumentManagementModal @ref="DocumentManagementModalRef" Closed="@OnDocumentManagementModalClosed" DocumentType="C4"></LocalEdit2.Modals.DocumentManagementModal>

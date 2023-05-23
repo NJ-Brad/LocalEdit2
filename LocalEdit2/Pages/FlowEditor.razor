@@ -288,6 +288,5 @@
 
 <LocalEdit2.Modals.FlowItemModal @ref="FlowItemModalRef" Items="@Document?.items" Closed="@OnFlowItemModalClosed" Item="@SelectedItemRow"></LocalEdit2.Modals.FlowItemModal>
 
-
-<LocalEdit2.Modals.FileManagementModal  @ref="FileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal>
 <LocalEdit2.Modals.GitManagementModal @ref="GitManagementModalRef" Closed="@OnGitManagementModalClosed"></LocalEdit2.Modals.GitManagementModal>
+<LocalEdit2.Modals.DocumentManagementModal @ref="DocumentManagementModalRef" Closed="@OnDocumentManagementModalClosed" DocumentType="Flow"></LocalEdit2.Modals.DocumentManagementModal>

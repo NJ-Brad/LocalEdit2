@@ -2,6 +2,7 @@
 {
     public class PlanDocument
     {
+        public string? Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
         public string? Title { get; set; } = "";
         public string? StartDate { get; set; } = "";
         public string? BaseUrl { get; set; } = "https://";

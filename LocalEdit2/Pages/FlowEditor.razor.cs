@@ -130,8 +130,8 @@ namespace LocalEdit2.Pages
 
         private Task NewFlow()
         {
-            if (FileManagementModalRef != null)
-                FileManagementModalRef.Name = "New_Flow.json";
+            if (DocumentManagementModalRef != null)
+                DocumentManagementModalRef.Document.DocumentTitle = "New_Flow.json";
 
             Document = new()
             {
@@ -255,12 +255,12 @@ namespace LocalEdit2.Pages
             return Task.CompletedTask;
         }
 
-        FileManagementModal? FileManagementModalRef { get; set; }
+        DocumentManagementModal? DocumentManagementModalRef { get; set; }
         GitManagementModal? GitManagementModalRef { get; set; }
 
         private Task LoadFile()
         {
-            FileManagementModalRef?.LoadFile();
+            DocumentManagementModalRef?.LoadFile();
 
             return Task.CompletedTask;
         }
@@ -278,7 +278,7 @@ namespace LocalEdit2.Pages
         {
             string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
 
-            FileManagementModalRef?.SaveFile(fileText);
+            DocumentManagementModalRef?.SaveFile(fileText);
 
             return Task.CompletedTask;
         }
@@ -288,10 +288,10 @@ namespace LocalEdit2.Pages
             {
                 GenerateMarkdown();
 
-                if (FileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "Flow.md";
-                    FileManagementModalRef.SaveFile(MarkdownText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "Flow.md";
+                    DocumentManagementModalRef.SaveFile(MarkdownText);
                 }
             }
 
@@ -304,23 +304,23 @@ namespace LocalEdit2.Pages
             {
                 string htmlText = GenerateHtml().Result;
 
-                if (FileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "Flow.html";
-                    FileManagementModalRef.SaveFile(htmlText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "Flow.html";
+                    DocumentManagementModalRef.SaveFile(htmlText);
                 }
             }
             return Task.CompletedTask;
         }
 
-        private Task OnFileManagementModalClosed()
+        private Task OnDocumentManagementModalClosed()
         {
-            if (FileManagementModalRef?.Result == ModalResult.OK)
+            if (DocumentManagementModalRef?.Result == ModalResult.OK)
             {
-                if (string.IsNullOrEmpty(FileManagementModalRef.FileText))
+                if (string.IsNullOrEmpty(DocumentManagementModalRef.FileText))
                     Document = null;
                 else
-                    Document = JsonSerializer.Deserialize(FileManagementModalRef.FileText, typeof(FlowDocument)) as FlowDocument;
+                    Document = JsonSerializer.Deserialize(DocumentManagementModalRef.FileText, typeof(FlowDocument)) as FlowDocument;
                 InvokeAsync(() => StateHasChanged());
             }
 

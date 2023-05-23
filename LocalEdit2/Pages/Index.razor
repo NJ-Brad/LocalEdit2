@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Collections.ObjectModel;
+@using LocalEdit2.ErrorHandling;
 
 <PageTitle>Local Edit 2 - Home</PageTitle>
 
@@ -12,6 +13,32 @@ Add this to the deploy project  https://stackoverflow.com/questions/73687176/per
 And this https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site
 
 <LocalEdit2.Shared.GitInfoDisplay></LocalEdit2.Shared.GitInfoDisplay>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@LoadFile">
+    <Icon Name="IconName.FileUpload" />
+    Load
+</Button>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@SaveFile">
+    <Icon Name="IconName.FileDownload" />
+    Save
+</Button>
+<br />
+@if ((DocumentManagementModalRef != null) && (DocumentManagementModalRef.Document != null))
+{
+    @DocumentManagementModalRef.Document.Content
+}
+<br />
+@DocumentId
+<br />
+@DocumentName
+<br />
+@DocumentText
+
+<LocalEdit2.Modals.DocumentManagementModal @ref="DocumentManagementModalRef" 
+Closed="@OnDocumentManagementModalClosed" 
+DocumentType="C4"
+></LocalEdit2.Modals.DocumentManagementModal>
 
 @*<WheelZoom Image="/mire.png" width="500" height="500" />*@
 

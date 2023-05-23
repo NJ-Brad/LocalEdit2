@@ -307,19 +307,22 @@ namespace LocalEdit2.Pages
 
         private Task LoadFile()
         {
-            FileManagementModalRef?.LoadFile();
+            //FileManagementModalRef?.LoadFile();
+            DocumentManagementModalRef?.LoadFile();
 
             return Task.CompletedTask;
         }
 
-        FileManagementModal? FileManagementModalRef { get; set; }
+        //FileManagementModal? FileManagementModalRef { get; set; }
 
-        private Task OnFileManagementModalClosed()
+        DocumentManagementModal? DocumentManagementModalRef { get; set; }
+
+        private Task OnDocumentManagementModalClosed()
         {
-            if (FileManagementModalRef?.Result == ModalResult.OK)
+            if (DocumentManagementModalRef?.Result == ModalResult.OK)
             {
-                if((FileManagementModalRef != null) &&(!string.IsNullOrEmpty(FileManagementModalRef.FileText)))
-                    Document = JsonSerializer.Deserialize(FileManagementModalRef.FileText, typeof(C4Workspace)) as C4Workspace;
+                if((DocumentManagementModalRef != null) &&(!string.IsNullOrEmpty(DocumentManagementModalRef.FileText)))
+                    Document = JsonSerializer.Deserialize(DocumentManagementModalRef.FileText, typeof(C4Workspace)) as C4Workspace;
                 else
                     Document = null;
                 InvokeAsync(() => StateHasChanged());
@@ -339,14 +342,14 @@ namespace LocalEdit2.Pages
 
         private Task SaveFile()
         {
-            string fileText = JsonSerializer.Serialize(Document, new JsonSerializerOptions { WriteIndented = true }); ;
+            string fileText = JsonSerializer.Serialize<C4Workspace>(Document, new JsonSerializerOptions { WriteIndented = true }); ;
             //if (selectedItemRow == null)
             //{
             //    return Task.CompletedTask;
             //}
             //flowItemModalRef.item = selectedItemRow;
 
-            FileManagementModalRef?.SaveFile(fileText);
+            DocumentManagementModalRef?.SaveFile(fileText);
             //fileManagementModalRef?.ShowModal();
 
             //InvokeAsync(() => StateHasChanged());
@@ -599,10 +602,10 @@ namespace LocalEdit2.Pages
             {
                 await GenerateMarkdown();
 
-                if (FileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "Flow.md";
-                    FileManagementModalRef?.SaveFile(MarkdownText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "Flow.md";
+                    DocumentManagementModalRef?.SaveFile(MarkdownText);
                 }
             }
 
@@ -615,10 +618,10 @@ namespace LocalEdit2.Pages
             {
                 string htmlText = GenerateHtml().Result;
 
-                if (FileManagementModalRef != null)
+                if (DocumentManagementModalRef != null)
                 {
-                    FileManagementModalRef.Name = "flow.html";
-                    FileManagementModalRef.SaveFile(htmlText);
+                    DocumentManagementModalRef.Document.DocumentTitle = "flow.html";
+                    DocumentManagementModalRef.SaveFile(htmlText);
                 }
             }
             return Task.CompletedTask;

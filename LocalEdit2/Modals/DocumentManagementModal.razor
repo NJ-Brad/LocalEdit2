@@ -1,0 +1,161 @@
+﻿@using Blazorise.Components
+@using LocalEdit2.DocumentTypes
+
+@inherits LE_ModalBase
+<Modal @ref="modalRef" @bind-Visible="@modalVisible" Closing="@OnModalClosing" Opened="@OnModalOpened">
+    <ModalContent Centered Size="ModalSize.Large">
+        <ModalHeader>
+            @if (loadFileMode)
+            {
+                <ModalTitle>Load Document</ModalTitle>
+            }
+            @if (!loadFileMode)
+            {
+                <ModalTitle>Save Document</ModalTitle>
+            }
+@*            <CloseButton />*@
+        </ModalHeader>
+        <ModalBody>
+            <div style="height: 300px">
+                @* FullWidth   Justified *@
+                <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged" TabPosition="TabPosition.Start" Pills="true" >
+    <Items>
+        <Tab Name="cloud">Cloud</Tab>
+        <Tab Name="file">File</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="cloud">
+            @if(loadFileMode)
+            {
+                            <DataGrid TItem="Document"
+                                      Data="@Documents"
+                                      @bind-SelectedRow="@SelectedDocument"
+                                      Responsive
+                                    ShowPager=false
+                                    PageSize="50"
+                                    FixedHeader FixedHeaderDataGridHeight="300px"
+                                           RowDoubleClicked="@LoadCloudDocument">
+                                <DataGridColumns>
+                                         <DataGridColumn Field="@nameof(Document.DocumentTitle)" Caption="Name" Editable="false" />
+                                         <DataGridDateColumn Field="@nameof(Document.Created)" Caption="Created" Editable="false" />
+                                         <DataGridDateColumn Field="@nameof(Document.Modified)" Caption="Modified" Editable="false" />
+
+<!--                                    <DataGridColumn Field="@nameof( C4FlatItem.Text )" Editable="false">
+                                        <DisplayTemplate>
+                                            @{
+                                                C4FlatItem? item = context as C4FlatItem;
+                                                if (item != null)
+                                                {
+                                                    <span style="@StyleForLevel(item.Level)">@($"{item.Text}")</span>
+                                                }
+                                            }
+                                        </DisplayTemplate>
+
+                                    </DataGridColumn>
+-->                                </DataGridColumns>
+                                <EmptyTemplate>
+                                    <div class="box">
+                                        No documents were found!
+                                    </div>
+                                </EmptyTemplate>
+                            </DataGrid>
+
+
+
+<!--                            <SelectList TItem="DocumentTypeNamePair"
+                                TValue="DocumentTypeEnum"
+                                Data="@DocumentTypes"
+                                TextField="@((item)=>item.Description)"
+                                ValueField="@((item)=>item.Value)"
+                                DefaultItemText="Choose document type"
+                                    />-->
+
+                <!--                @bind-SelectedValue="@SelectedNode.ItemType"-->
+            }
+            else
+            {
+                <TextEdit @bind-Text="Document.DocumentTitle" Placeholder="Enter file name" />
+            }
+
+        </TabPanel>
+        <TabPanel Name="file">
+            @if(loadFileMode)
+            {
+                <FilePicker Upload="OnFileUpload" ShowMode="FilePickerShowMode.Dropdown" AutoReset=true/>
+            }
+            else
+            {
+                <TextEdit @bind-Text="Document.DocumentTitle" Placeholder="Enter file name" />
+                <button class="btn btn-primary" @onclick="DownloadFile">Save</button>
+            }
+        </TabPanel>
+    </Content>
+</Tabs>
+
+            <!--https://stackoverflow.com/questions/2637696/how-to-place-div-side-by-side-->
+
+<!--<div style="width: 100%; overflow: hidden;">
+     <div style="width:25%; float: left;">
+          <a href="#" class="w3-bar-item w3-button">Link 1</a><br />
+          <a href="#" class="w3-bar-item w3-button">Link 2</a><br />
+          <a href="#" class="w3-bar-item w3-button">Link 3</a>
+     </div>
+     <div style="margin-left:25%;">
+            @if(loadFileMode)
+            {
+                <FilePicker Upload="OnFileUpload" ShowMode="FilePickerShowMode.Dropdown" AutoReset=true/>
+            }
+            else
+            {
+                <TextEdit @bind-Text="Name" Placeholder="Enter file name" />
+@*                 <button class="btn btn-primary" @onclick="DownloadFile">Save</button>
+ *@            }
+        </div>
+</div>
+-->
+                </div>
+        </ModalBody>
+        <ModalFooter>
+            @if (selectedTab == "cloud")
+            {
+                @if (loadFileMode)
+                {
+                    @if (SelectedDocument == null)
+                    {
+                        <Button Color="Color.Primary" Clicked="@LoadCloudDocument"
+                            Disabled>
+                         Load
+                     </Button>
+                    }
+                    else
+                    {
+                        <Button Color="Color.Primary" Clicked="@LoadCloudDocument">Load</Button>
+                    }
+                }
+                else
+                {
+                    @if (string.IsNullOrEmpty(Document.DocumentTitle))
+                    {
+                        <Button Color="Color.Primary" Clicked="@SaveCloudDocument"
+                            Disabled>
+                         Save
+                     </Button>
+                    }
+                    else
+                    {
+                        <Button Color="Color.Primary" Clicked="@SaveCloudDocument">Save</Button>
+                    }
+                }
+            }
+            else
+            {
+                @if (!loadFileMode)
+                {
+                    <button class="btn btn-primary" @onclick="DownloadFile">Save</button>
+                }
+            }
+            <Button Color="Color.Warning" Clicked="@CloseModal">Cancel</Button>
+            @*            <Button Color="Color.Primary" Clicked="@TryCloseModal">Save Changes</Button>*@
+        </ModalFooter>
+    </ModalContent>
+</Modal>

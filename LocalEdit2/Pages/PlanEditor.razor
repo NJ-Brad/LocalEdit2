@@ -494,11 +494,10 @@
 <LocalEdit2.Modals.PlanItemModal @ref="planItemModalRef" Items=@Document?.Items Closed="@OnPlanItemModalClosed" Item="@SelectedItemRow"></LocalEdit2.Modals.PlanItemModal>
 <LocalEdit2.Modals.SprintModal @ref="sprintModalRef" Closed="@OnSprintModalClosed" Item="@SelectedSprintRow"></LocalEdit2.Modals.SprintModal>
 
-<LocalEdit2.Modals.FileManagementModal @ref="fileManagementModalRef" Closed="@OnFileManagementModalClosed"></LocalEdit2.Modals.FileManagementModal>
-<LocalEdit2.Modals.MessageBox @ref="messageBoxRef" Closed="@OnMessageBoxClosed"></LocalEdit2.Modals.MessageBox>
+<LocalEdit2.Modals.DocumentManagementModal @ref="DocumentManagementModalRef" Closed="@OnDocumentManagementModalClosed" DocumentType="Plan"></LocalEdit2.Modals.DocumentManagementModal><LocalEdit2.Modals.MessageBox @ref="messageBoxRef" Closed="@OnMessageBoxClosed"></LocalEdit2.Modals.MessageBox>
 <LocalEdit2.Modals.PlanExportModal @ref="planExportModalRef" Closed="@OnPlanExportClosed"></LocalEdit2.Modals.PlanExportModal>
 
-<PageTitle>Plan Editor - @fileManagementModalRef?.Name</PageTitle>
+<PageTitle>Plan Editor - @DocumentManagementModalRef?.Document.DocumentTitle</PageTitle>
 
 <HeadContent>
     @*    <meta name="description" content="@description">*@
