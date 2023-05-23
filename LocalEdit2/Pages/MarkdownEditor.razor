@@ -1,0 +1,23 @@
+﻿@page "/MarkdownEditor"
+@using Blazorise.Markdown
+<h3>Markdown Editor</h3>
+<hr/>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@NewMdDocument">
+    <Icon Name="IconName.Star" />
+    New Document
+</Button>
+
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@LoadFile">
+    <Icon Name="IconName.FileUpload" />
+    Load
+</Button>
+<Button Size="Size.Small" Color="Color.Primary" Clicked="@SaveFile">
+    <Icon Name="IconName.FileDownload" />
+    Save
+</Button>
+
+<Markdown Value="@markdownValue" ValueChanged="@OnMarkdownValueChanged" />
+
+<LocalEdit2.Modals.DocumentManagementModal @ref="DocumentManagementModalRef" Closed="@OnDocumentManagementModalClosed" DocumentType="MD"></LocalEdit2.Modals.DocumentManagementModal>
+
