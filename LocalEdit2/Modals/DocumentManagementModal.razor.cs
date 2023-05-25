@@ -187,13 +187,13 @@ namespace LocalEdit2.Modals
         {
 
             //// https://stackoverflow.com/questions/60264657/get-current-user-in-a-blazor-component
-            //var authState = await authenticationStateTask;
-            //var user = authState.User;
+            var authState = await authenticationStateTask;
+            var user = authState.User;
 
-            //if (user.Identity.IsAuthenticated)
-            //{
-            //    Console.WriteLine($"{user.Identity.Name} is authenticated.");
-            //}
+            if (user.Identity.IsAuthenticated)
+            {
+                Console.WriteLine($"{user.Identity.Name} is authenticated.");
+            }
 
             if (DocumentDataService != null)
             {

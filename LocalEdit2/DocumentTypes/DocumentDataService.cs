@@ -1,5 +1,8 @@
 ﻿using LocalEdit2.IPAddressTypes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http;
 using System.Reflection.Metadata;
@@ -12,14 +15,16 @@ namespace LocalEdit2.DocumentTypes
 {
     // https://dev.to/moe23/blazor-wasm-with-rest-api-step-by-step-2djo
     // https://www.myip.com/api-docs/
+    [Authorize]
     public class DocumentDataService : IDocumentDataService
     {
         // Using the httpclient to call our API, 
         // its being initialized via the constructor injection
         private readonly HttpClient _httpClient;
 
-        public DocumentDataService(HttpClient httpClient)
+        public DocumentDataService(HttpClient httpClient, IHttpClientFactory factory)
         {
+            //_httpClient = factory.CreateClient("Functions");
             _httpClient = httpClient;
         }
 
@@ -30,7 +35,7 @@ namespace LocalEdit2.DocumentTypes
             var request = new HttpRequestMessage
             {
                 Method = new HttpMethod("GET"),
-                RequestUri = new Uri($"{_httpClient.BaseAddress}api/document")
+                RequestUri = new Uri($"{_httpClient.BaseAddress}/api/document")
             };
 
             request.SetBrowserRequestCache(BrowserRequestCache.NoStore); //optional 
@@ -47,51 +52,72 @@ namespace LocalEdit2.DocumentTypes
             }
             //var txt = await apiResponse.Content.ReadAsStringAsync();
 
-            var apiResponse = await _httpClient.GetStreamAsync($"api/document");
+            var apiResponse = await _httpClient.GetStreamAsync($"/api/document");
             return await JsonSerializer.DeserializeAsync<IEnumerable<Document>>
                                 (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
+
+        //[Inject]
+        //IAccessTokenProvider TokenProvider { get; set; }
+
+        //public string AccessToken { get; set; }
+
         public async Task<Document> GetDocument(string id)
         {
-            //var request = new HttpRequestMessage
-            //{
-            //    Method = new HttpMethod("GET"),
-            //    RequestUri = new Uri($"{_httpClient.BaseAddress}api/document/{id}")
-            //};
+            //var accessTokenResult = await TokenProvider.RequestAccessToken();
+            //AccessToken = string.Empty;
 
-            //request.SetBrowserRequestCache(BrowserRequestCache.NoStore); //optional 
-
-            //try
+            //if (accessTokenResult.TryGetToken(out var token))
             //{
-            //    var apiResponse1 = await _httpClient.SendAsync(request);
-
-            //    string txt = await apiResponse1.Content.ReadAsStringAsync();
-            //    var v2 =JsonSerializer.Deserialize<IEnumerable<Document>>
-            //                    (txt, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            //    var v3 = v2.ToArray<Document>()[0];
-            //}
-            //catch (Exception ex)
-            //{
-            //    System.Console.WriteLine(ex.ToString());
+            //    AccessToken = token.Value;
             //}
 
-            var apiResponse = await _httpClient.GetStreamAsync($"api/document/{id}");
-            var responseData = await JsonSerializer.DeserializeAsync<IEnumerable<Document>>
-                                (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            var arrayData = responseData.ToArray<Document>();
+        //var request = new HttpRequestMessage
+        //{
+        //    Method = new HttpMethod("GET"),
+        //    RequestUri = new Uri($"{_httpClient.BaseAddress}/api/document/{id}")
+        //};
 
-            Document rtnVal = null;
-            if((arrayData!= null) && (arrayData.Length>0))
+        //request.SetBrowserRequestCache(BrowserRequestCache.NoStore); //optional 
+
+        //try
+        //{
+        //    var apiResponse1 = await _httpClient.SendAsync(request);
+
+        //    string txt = await apiResponse1.Content.ReadAsStringAsync();
+        //    var v2 =JsonSerializer.Deserialize<IEnumerable<Document>>
+        //                    (txt, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        //    var v3 = v2.ToArray<Document>()[0];
+        //}
+        //catch (Exception ex)
+        //{
+        //    System.Console.WriteLine(ex.ToString());
+        //}
+
+        Document rtnVal = null;
+            try
             {
-                rtnVal = arrayData[0];
+                var apiResponse = await _httpClient.GetStreamAsync($"/api/document/{id}");
+                var responseData = await JsonSerializer.DeserializeAsync<IEnumerable<Document>>
+                                    (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var arrayData = responseData.ToArray<Document>();
+
+                if ((arrayData != null) && (arrayData.Length > 0))
+                {
+                    rtnVal = arrayData[0];
+                }
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
             }
 
             return rtnVal;
         }
         public async Task<Document> DeleteDocument(string id)
         {
-            var apiResponse = await _httpClient.GetStreamAsync($"api/todo/{id}");
+            var apiResponse = await _httpClient.GetStreamAsync($"/api/todo/{id}");
             return await JsonSerializer.DeserializeAsync<Document>
                                 (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
@@ -102,7 +128,7 @@ namespace LocalEdit2.DocumentTypes
                 document.Modified = DateTime.Now;
 
                 // https://stackoverflow.com/questions/4015324/send-http-post-request-in-net
-                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, $"api/document/{document.Id}");
+                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, $"/api/document/{document.Id}");
                 requestMessage.Content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.SendAsync(requestMessage);
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -120,8 +146,8 @@ namespace LocalEdit2.DocumentTypes
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
 
-            ////var apiResponse = await _httpClient.GetStreamAsync($"api/todo/{plan.id}");
-            //var apiResponse = await _httpClient.GetStreamAsync($"api/document");
+            ////var apiResponse = await _httpClient.GetStreamAsync($"/api/todo/{plan.id}");
+            //var apiResponse = await _httpClient.GetStreamAsync($"/api/document");
             //return await JsonSerializer.DeserializeAsync<Document>
             //                    (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
@@ -135,7 +161,7 @@ namespace LocalEdit2.DocumentTypes
             try
             {
                 // https://stackoverflow.com/questions/4015324/send-http-post-request-in-net
-                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/document");
+                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/document");
                 requestMessage.Content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.SendAsync(requestMessage);
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -157,8 +183,8 @@ namespace LocalEdit2.DocumentTypes
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
 
-            ////var apiResponse = await _httpClient.GetStreamAsync($"api/todo/{plan.id}");
-            //var apiResponse = await _httpClient.GetStreamAsync($"api/document");
+            ////var apiResponse = await _httpClient.GetStreamAsync($"/api/todo/{plan.id}");
+            //var apiResponse = await _httpClient.GetStreamAsync($"/api/document");
             //return await JsonSerializer.DeserializeAsync<Document>
             //                    (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
@@ -183,7 +209,7 @@ namespace LocalEdit2.DocumentTypes
         //    //request.SetBrowserRequestMode(BrowserRequestMode.NoCors);
         //    request.SetBrowserRequestCache(BrowserRequestCache.NoStore); //optional 
 
-        //    //            var apiResponse = await _httpClient.GetStreamAsync($"api/todo/{id}");
+        //    //            var apiResponse = await _httpClient.GetStreamAsync($"/api/todo/{id}");
         //    //            var apiResponse = await _httpClient.GetStreamAsync("");
         //    //return await JsonSerializer.DeserializeAsync<AddressInfo>
         //    //                    (apiResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
