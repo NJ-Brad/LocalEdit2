@@ -18,11 +18,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddMsalAuthentication(options =>
 {
-    // inspired by : https://github.com/dotnet/aspnetcore/issues/39104
-    options.ProviderOptions.LoginMode = "redirect";
-    // this one wasn't required
-    options.ProviderOptions.Cache.CacheLocation = "localStorage";
-
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
 });
 
@@ -38,16 +33,9 @@ builder.Services.AddBlazorDownloadFile();
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddHttpClient<IAddressDataService, AddressDataService>(x => x.BaseAddress = new Uri("https://api.myip.com"));
 builder.Services.AddHttpClient<ILaunchItemDataService, LaunchItemDataService>(x => x.BaseAddress = new Uri("https://fdo.rocketlaunch.live"));
-//builder.Services.AddHttpClient<IDocumentDataService, DocumentDataService>(x => x.BaseAddress = new Uri("https://localeditfunctions.azurewebsites.net/"));
-builder.Services.AddHttpClient<IDocumentDataService, DocumentDataService>(x => x.BaseAddress = new Uri("http://localhost:7049/"));
+builder.Services.AddHttpClient<IDocumentDataService, DocumentDataService>(x => x.BaseAddress = new Uri("https://localeditfunctions.azurewebsites.net/"));
+//builder.Services.AddHttpClient<IDocumentDataService, DocumentDataService>(x => x.BaseAddress = new Uri("http://localhost:7049/"));
 builder.Services.AddHttpClient<IDocumentIndexDataService, DocumentIndexDataService>(x => x.BaseAddress = new Uri("https://localeditfunctions.azurewebsites.net/"));
-
-
-
-// https://stackoverflow.com/questions/68553637/blazor-standalone-wasm-unable-to-get-access-token-with-msal
-
-
-
 
 //builder.Services.AddMermaidJS(options =>
 //{

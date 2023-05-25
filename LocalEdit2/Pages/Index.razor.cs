@@ -1,5 +1,7 @@
 ﻿using LocalEdit2.C4Types;
 using LocalEdit2.Modals;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components;
 using System.Text.Json;
 
 namespace LocalEdit2.Pages
@@ -10,11 +12,23 @@ namespace LocalEdit2.Pages
         public string DocumentId { get; set; } = "[Empty]";
         public string DocumentName { get; set; } = "[Empty]";
 
-        private Task LoadFile()
+        [CascadingParameter] 
+        private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+        private async Task LoadFile()
         {
+            // https://stackoverflow.com/questions/60264657/get-current-user-in-a-blazor-component
+            //var authState = await authenticationStateTask;
+            //var user = authState.User;
+
+            //if (user.Identity.IsAuthenticated)
+            //{
+            //    Console.WriteLine($"{user.Identity.Name} is authenticated.");
+            //}
+
             DocumentManagementModalRef?.LoadFile();
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         DocumentManagementModal? DocumentManagementModalRef { get; set; }

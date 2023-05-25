@@ -1,4 +1,6 @@
-﻿namespace LocalEdit2.DocumentTypes
+﻿using Microsoft.AspNetCore.Components.Authorization;
+
+namespace LocalEdit2.DocumentTypes
 {
     public interface IDocumentDataService
     {

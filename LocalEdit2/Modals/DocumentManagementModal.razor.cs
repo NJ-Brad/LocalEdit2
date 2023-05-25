@@ -3,6 +3,7 @@ using Blazorise;
 using LocalEdit2.C4Types;
 using LocalEdit2.DocumentTypes;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 //using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
@@ -21,6 +22,10 @@ namespace LocalEdit2.Modals
 
         [Parameter]
         public Document Document { get; set; } = new();
+
+        [CascadingParameter]
+        private Task<AuthenticationState> authenticationStateTask { get; set; }
+
 
         private string originalFileName = string.Empty;
 
@@ -54,14 +59,15 @@ namespace LocalEdit2.Modals
             return Task.CompletedTask;
         }
 
-        public Task LoadFile()
+        public async Task LoadFile()
         {
             loadFileMode = true;
             modalVisible = true;
 
-            InvokeAsync(() => StateHasChanged());
+            //InvokeAsync(() => StateHasChanged());
+            //StateHasChanged();
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         async Task OnFileUpload(FileUploadEventArgs e)
@@ -179,6 +185,16 @@ namespace LocalEdit2.Modals
 
         private async Task LoadCloudDocument()
         {
+
+            //// https://stackoverflow.com/questions/60264657/get-current-user-in-a-blazor-component
+            //var authState = await authenticationStateTask;
+            //var user = authState.User;
+
+            //if (user.Identity.IsAuthenticated)
+            //{
+            //    Console.WriteLine($"{user.Identity.Name} is authenticated.");
+            //}
+
             if (DocumentDataService != null)
             {
                 Document doc = await DocumentDataService.GetDocument(SelectedDocument.Id);

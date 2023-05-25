@@ -1,9 +1,12 @@
 ﻿using LocalEdit2.IPAddressTypes;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http;
 using System.Reflection.Metadata;
+using System.Security;
 using System.Text;
 using System.Text.Json;
+
 
 namespace LocalEdit2.DocumentTypes
 {
@@ -22,7 +25,6 @@ namespace LocalEdit2.DocumentTypes
 
         public async Task<IEnumerable<Document>> GetAllDocuments()
         {
-            // this is for testing
 
             // https://stackoverflow.com/questions/64858434/net5-0-blazor-wasm-cors-client-exception
             var request = new HttpRequestMessage

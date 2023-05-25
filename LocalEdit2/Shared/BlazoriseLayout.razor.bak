@@ -15,11 +15,6 @@
     </LayoutSider>
     <Layout>
         <LayoutContent>
-        
-		<div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>        
             <div class="content px-4">
                 @if (isErrorActive)
                 {
